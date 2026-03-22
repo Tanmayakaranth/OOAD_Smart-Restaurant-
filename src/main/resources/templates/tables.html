@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Restaurant Tables</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 70%;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        td {
+            background-color: white;
+        }
+
+        .OCCUPIED {
+            background-color: #ffcccc;
+        }
+
+        .AVAILABLE {
+            background-color: #ccffcc;
+        }
+
+        .CLEANING {
+            background-color: #ffffcc;
+        }
+
+        button {
+            padding: 6px 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .container {
+            display: flex;
+            gap: 40px;
+        }
+
+        .section {
+            flex: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Table Status</h1>
+
+<div class="container">
+
+    <!-- TABLES -->
+    <div class="section">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Capacity</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <!-- 🔥 THIS WILL BE FILLED BY JS -->
+            <tbody id="table-body"></tbody>
+        </table>
+    </div>
+
+    <!-- WAITLIST -->
+    <div class="section">
+        <h2>Waitlist</h2>
+
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Group Size</th>
+                    <th>VIP</th>
+                </tr>
+            </thead>
+
+            <!-- 🔥 FILLED BY JS -->
+            <tbody id="waitlist-body"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<h2>Allocate Table</h2>
+
+<form action="/allocate" method="post">
+    Customer ID: <input type="number" name="customerId" required><br><br>
+    Group Size: <input type="number" name="groupSize" required><br><br>
+    VIP: <input type="checkbox" name="isVIP"><br><br>
+    <button type="submit">Allocate</button>
+</form>
+
+<!-- 🔥 REAL-TIME SCRIPT -->
+<script>
+function refreshData() {
+    fetch('/tables-data')
+        .then(res => res.json())
+        .then(data => {
+
+            // TABLES
+            const tableBody = document.getElementById("table-body");
+            tableBody.innerHTML = "";
+
+            data.tables.forEach(t => {
+                let row = `
+                    <tr>
+                        <td>${t.tableId}</td>
+                        <td>${t.capacity}</td>
+                        <td class="${t.status}">
+                            ${t.status}
+                            ${t.status === 'CLEANING' ? '(Cleaning...)' : ''}
+                        </td>
+                        <td>
+                            <form action="/free/${t.tableId}" method="post">
+                                <button type="submit">Free</button>
+                            </form>
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+
+            // WAITLIST
+            const waitBody = document.getElementById("waitlist-body");
+            waitBody.innerHTML = "";
+
+            data.waitlist.forEach(c => {
+                let row = `
+                    <tr>
+                        <td>${c.customerId}</td>
+                        <td>${c.groupSize}</td>
+                        <td>${c.vip}</td>
+                    </tr>
+                `;
+                waitBody.innerHTML += row;
+            });
+
+        });
+}
+
+// 🔁 refresh every 2 sec
+setInterval(refreshData, 2000);
+
+// initial load
+refreshData();
+</script>
+
+</body>
+</html>
