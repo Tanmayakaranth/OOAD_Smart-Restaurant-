@@ -1,6 +1,6 @@
-C:.
 │   .gitattributes
 │   .gitignore
+│   Flow.txt
 │   HELP.md
 │   mvnw
 │   mvnw.cmd
@@ -16,25 +16,34 @@ C:.
 │   │   │               │   TableManagementApplication.java
 │   │   │               │
 │   │   │               ├───controller
+│   │   │               │       OrderController.java
 │   │   │               │       TableController.java
 │   │   │               │       ViewController.java
 │   │   │               │
 │   │   │               ├───dto
 │   │   │               │       CustomerRequest.java
+│   │   │               │       OrderRequest.java
 │   │   │               │
 │   │   │               ├───model
 │   │   │               │       Customer.java
+│   │   │               │       Order.java
+│   │   │               │       OrderItem.java
+│   │   │               │       OrderPriority.java
+│   │   │               │       OrderStatus.java
 │   │   │               │       Reservation.java
 │   │   │               │       Table.java
 │   │   │               │       TableStatus.java
 │   │   │               │
 │   │   │               └───service
+│   │   │                       OrderPriorityQueue.java
+│   │   │                       OrderService.java
 │   │   │                       RestaurantManager.java
 │   │   │
 │   │   └───resources
 │   │       │   application.properties
 │   │       │
 │   │       └───templates
+│   │               orders.html
 │   │               tables.html
 │   │
 │   └───test
@@ -54,22 +63,32 @@ C:.
     │   │           │   TableManagementApplication.class
     │   │           │
     │   │           ├───controller
+    │   │           │       OrderController.class
     │   │           │       TableController.class
     │   │           │       ViewController.class
     │   │           │
     │   │           ├───dto
     │   │           │       CustomerRequest.class
+    │   │           │       OrderRequest$OrderItemRequest.class
+    │   │           │       OrderRequest.class
     │   │           │
     │   │           ├───model
     │   │           │       Customer.class
+    │   │           │       Order.class
+    │   │           │       OrderItem.class
+    │   │           │       OrderPriority.class
+    │   │           │       OrderStatus.class
     │   │           │       Reservation.class
     │   │           │       Table.class
     │   │           │       TableStatus.class
     │   │           │
     │   │           └───service
+    │   │                   OrderPriorityQueue.class
+    │   │                   OrderService.class
     │   │                   RestaurantManager.class
     │   │
     │   └───templates
+    │           orders.html
     │           tables.html
     │
     ├───generated-sources
@@ -87,6 +106,10 @@ C:.
     │           └───default-testCompile
     │                   createdFiles.lst
     │                   inputFiles.lst
+    │
+    ├───surefire-reports
+    │       com.restaurant.table_management.TableManagementApplicationTests.txt
+    │       TEST-com.restaurant.table_management.TableManagementApplicationTests.xml
     │
     └───test-classes
         └───com
