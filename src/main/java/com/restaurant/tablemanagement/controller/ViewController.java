@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import com.restaurant.tablemanagement.service.RestaurantManager;
+import com.restaurant.tablemanagement.service.OrderService;
 import com.restaurant.tablemanagement.model.Customer;
 import com.restaurant.tablemanagement.model.Table;
 
@@ -18,12 +19,21 @@ public class ViewController {
     @Autowired
     private RestaurantManager manager;
 
+    @Autowired
+    private OrderService orderService;
+
     // 🔹 Load main UI
     @GetMapping("/")
     public String viewTables(Model model) {
         model.addAttribute("tables", manager.getTables());
         model.addAttribute("waitlist", manager.getWaitlist());
         return "tables";
+    }
+
+    // 🔹 Load orders UI
+    @GetMapping({"/orders", "/orders.html"})
+    public String viewOrders() {
+        return "orders";
     }
 
     // 🔹 Allocate table
@@ -52,9 +62,10 @@ public class ViewController {
     // 🔹 Free table
     @PostMapping("/free/{id}")
     public String free(@PathVariable int id, Model model) {
+        int cancelledOrders = orderService.cancelActiveOrdersForTable("TABLE-" + id);
         manager.freeTable(id);
 
-        model.addAttribute("message", "Table " + id + " is being cleaned");
+        model.addAttribute("message", "Table " + id + " is being cleaned. Cancelled orders: " + cancelledOrders);
         model.addAttribute("tables", manager.getTables());
         model.addAttribute("waitlist", manager.getWaitlist());
 

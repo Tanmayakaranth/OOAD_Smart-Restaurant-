@@ -1,0 +1,95 @@
+C:.
+│   .gitattributes
+│   .gitignore
+│   HELP.md
+│   mvnw
+│   mvnw.cmd
+│   pom.xml
+│   README.md
+│
+├───src
+│   ├───main
+│   │   ├───java
+│   │   │   └───com
+│   │   │       └───restaurant
+│   │   │           └───tablemanagement
+│   │   │               │   TableManagementApplication.java
+│   │   │               │
+│   │   │               ├───controller
+│   │   │               │       TableController.java
+│   │   │               │       ViewController.java
+│   │   │               │
+│   │   │               ├───dto
+│   │   │               │       CustomerRequest.java
+│   │   │               │
+│   │   │               ├───model
+│   │   │               │       Customer.java
+│   │   │               │       Reservation.java
+│   │   │               │       Table.java
+│   │   │               │       TableStatus.java
+│   │   │               │
+│   │   │               └───service
+│   │   │                       RestaurantManager.java
+│   │   │
+│   │   └───resources
+│   │       │   application.properties
+│   │       │
+│   │       └───templates
+│   │               tables.html
+│   │
+│   └───test
+│       └───java
+│           └───com
+│               └───restaurant
+│                   └───table_management
+│                           TableManagementApplicationTests.java
+│
+└───target
+    ├───classes
+    │   │   application.properties
+    │   │
+    │   ├───com
+    │   │   └───restaurant
+    │   │       └───tablemanagement
+    │   │           │   TableManagementApplication.class
+    │   │           │
+    │   │           ├───controller
+    │   │           │       TableController.class
+    │   │           │       ViewController.class
+    │   │           │
+    │   │           ├───dto
+    │   │           │       CustomerRequest.class
+    │   │           │
+    │   │           ├───model
+    │   │           │       Customer.class
+    │   │           │       Reservation.class
+    │   │           │       Table.class
+    │   │           │       TableStatus.class
+    │   │           │
+    │   │           └───service
+    │   │                   RestaurantManager.class
+    │   │
+    │   └───templates
+    │           tables.html
+    │
+    ├───generated-sources
+    │   └───annotations
+    ├───generated-test-sources
+    │   └───test-annotations
+    ├───maven-status
+    │   └───maven-compiler-plugin
+    │       ├───compile
+    │       │   └───default-compile
+    │       │           createdFiles.lst
+    │       │           inputFiles.lst
+    │       │
+    │       └───testCompile
+    │           └───default-testCompile
+    │                   createdFiles.lst
+    │                   inputFiles.lst
+    │
+    └───test-classes
+        └───com
+            └───restaurant
+                └───table_management
+                        TableManagementApplicationTests.class
