@@ -15,6 +15,7 @@ public class Order {
     private LocalDateTime createdAt;
     private LocalDateTime completionTime;
     private Double totalAmount;
+    private boolean isCustomerVIP;      // Track if customer is VIP for kitchen processing
     
     // Constructor
     public Order(String customerId, String tableId, OrderPriority priority) {
@@ -26,6 +27,20 @@ public class Order {
         this.createdAt = LocalDateTime.now();
         this.orderItems = new ArrayList<>();
         this.totalAmount = 0.0;
+        this.isCustomerVIP = false;
+    }
+    
+    // Constructor with VIP flag
+    public Order(String customerId, String tableId, OrderPriority priority, boolean isVIP) {
+        this.orderId = generateOrderId();
+        this.customerId = customerId;
+        this.tableId = tableId;
+        this.orderPriority = priority;
+        this.orderStatus = OrderStatus.CREATED;
+        this.createdAt = LocalDateTime.now();
+        this.orderItems = new ArrayList<>();
+        this.totalAmount = 0.0;
+        this.isCustomerVIP = isVIP;
     }
     
     // Methods
@@ -96,10 +111,30 @@ public class Order {
     public String getTableId() { return tableId; }
     public List<OrderItem> getOrderItems() { return orderItems; }
     public OrderPriority getOrderPriority() { return orderPriority; }
+    public OrderPriority getPriority() { return orderPriority; }
     public OrderStatus getOrderStatus() { return orderStatus; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getCompletionTime() { return completionTime; }
     public Double getTotalAmount() { return totalAmount; }
+    public boolean isCustomerVIP() { return isCustomerVIP; }
+    public void setCustomerVIP(boolean vip) { this.isCustomerVIP = vip; }
+    
+    public void setStatus(OrderStatus status) { 
+        updateOrderStatus(status);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return Objects.equals(orderId, order.orderId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderId);
+    }
 }
 
 /*Purpose:
@@ -107,8 +142,10 @@ Core order entity
 Contains multiple OrderItems
 Linked to TABLE and CUSTOMER (Person 1's models)
 Tracks entire lifecycle
+Tracks customer VIP status for kitchen prioritization
 
 Integration Points:
 tableId → Person 1's Table system
 customerId → Person 1's Customer system
-orderPriority → Used by OrderPriorityQueue */
+orderPriority → Used by OrderPriorityQueue
+isCustomerVIP → Automatically upgrades priority for VIP customers */

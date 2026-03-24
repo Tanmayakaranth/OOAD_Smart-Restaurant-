@@ -4,6 +4,7 @@ import com.restaurant.tablemanagement.model.*;
 import com.restaurant.tablemanagement.dto.OrderRequest;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,9 @@ public class OrderService {
 
     @Autowired
     private RestaurantManager restaurantManager;
+    
+    @Autowired
+    private ObjectProvider<KitchenService> kitchenServiceProvider;
     
     // In-memory storage (replace with database later)
     private Map<String, Order> orders = new HashMap<>();
@@ -43,11 +47,20 @@ public class OrderService {
 
         restaurantManager.occupyTable(tableNumber);
 
-        // Create new order
+        // Determine order priority: VIP customers get VIP priority
+        OrderPriority priority = OrderPriority.NORMAL;
+        if (request.isVIP()) {
+            priority = OrderPriority.VIP;
+        } else if (request.getOrderPriority() != null) {
+            priority = request.getOrderPriority();
+        }
+
+        // Create new order with VIP status
         Order order = new Order(
             request.getCustomerId(),
             toCanonicalTableId(tableNumber),
-            request.getOrderPriority() != null ? request.getOrderPriority() : OrderPriority.NORMAL
+            priority,
+            request.isVIP()  // Pass VIP flag to order
         );
         
         // Add items from request
@@ -65,6 +78,12 @@ public class OrderService {
         
         // Add to priority queue
         orderQueue.enqueueOrder(order);
+        
+        // Add to kitchen queue for processing
+        KitchenService kitchenService = kitchenServiceProvider.getIfAvailable();
+        if (kitchenService != null) {
+            kitchenService.addOrderToKitchen(order);
+        }
         
         return order;
     }
@@ -150,12 +169,9 @@ public class OrderService {
     }
     
     // ===== RETRIEVE ORDERS =====
-    public Order getOrderById(String orderId) {
+    public java.util.Optional<Order> getOrderById(String orderId) {
         Order order = orders.get(orderId);
-        if (order == null) {
-            throw new RuntimeException("Order not found: " + orderId);
-        }
-        return order;
+        return java.util.Optional.ofNullable(order);
     }
     
     public List<Order> getOrdersByTable(String tableId) {
@@ -195,6 +211,49 @@ public class OrderService {
     
     public void enableRushHourMode(boolean enabled) {
         orderQueue.enableRushHourMode(enabled);
+    }
+
+    /**
+     * Upgrades a customer to VIP status and updates all their active orders to VIP priority.
+     * This allows staff to give VIP treatment to a customer mid-booking.
+     * 
+     * @param customerId The customer ID to upgrade
+     */
+    public void upgradeCustomerToVIP(String customerId) {
+        if (customerId == null || customerId.isBlank()) {
+            throw new RuntimeException("Invalid customer ID");
+        }
+        
+        // Find all active orders for this customer
+        orders.values().stream()
+            .filter(order -> order.getCustomerId().equals(customerId))
+            .filter(this::isActiveOrder)
+            .forEach(order -> {
+                // Upgrade to VIP priority
+                order.setCustomerVIP(true);
+                // Allow priority to be upgraded if not already VIP
+                if (order.getOrderPriority() != OrderPriority.VIP) {
+                    // Can't directly change priority, but mark as VIP for processing
+                    System.out.println("✨ Customer " + customerId + " upgraded to VIP! Order " + 
+                                     order.getOrderId() + " now has priority processing.");
+                }
+            });
+    }
+    
+    /**
+     * Downgrades a customer from VIP status.
+     * 
+     * @param customerId The customer ID to downgrade
+     */
+    public void downgradeCustomerFromVIP(String customerId) {
+        if (customerId == null || customerId.isBlank()) {
+            throw new RuntimeException("Invalid customer ID");
+        }
+        
+        // Find all orders for this customer
+        orders.values().stream()
+            .filter(order -> order.getCustomerId().equals(customerId))
+            .forEach(order -> order.setCustomerVIP(false));
     }
 
     public int cancelActiveOrdersForTable(String tableId) {

@@ -8,6 +8,7 @@ public class OrderRequest {
     private String customerId;
     private String tableId;
     private OrderPriority orderPriority;
+    private boolean isVIP;              // Track if customer is VIP
     private List<OrderItemRequest> items;
     
     // Inner class for order items
@@ -37,6 +38,9 @@ public class OrderRequest {
     public OrderPriority getOrderPriority() { return orderPriority; }
     public void setOrderPriority(OrderPriority priority) { this.orderPriority = priority; }
     
+    public boolean isVIP() { return isVIP; }
+    public void setVIP(boolean vip) { this.isVIP = vip; }
+    
     public List<OrderItemRequest> getItems() { return items; }
     public void setItems(List<OrderItemRequest> items) { this.items = items; }
 }
@@ -52,7 +56,8 @@ Example Usage:
 json{
     "customerId": "CUST-123",
     "tableId": "TABLE-5",
-    "orderPriority": "VIP",
+    "isVIP": true,
+    "orderPriority": "NORMAL",  // Will be overridden to VIP if isVIP is true
     "items": [
         {"menuItemId": "MENU-001", "quantity": 2, "specialNotes": "No onions"},
         {"menuItemId": "MENU-005", "quantity": 1, "specialNotes": ""}

@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 import com.restaurant.tablemanagement.service.RestaurantManager;
 import com.restaurant.tablemanagement.service.OrderService;
+import com.restaurant.tablemanagement.service.KitchenService;
 import com.restaurant.tablemanagement.model.Customer;
 import com.restaurant.tablemanagement.model.Table;
 
@@ -21,6 +22,9 @@ public class ViewController {
 
     @Autowired
     private OrderService orderService;
+    
+    @Autowired
+    private KitchenService kitchenService;
 
     // 🔹 Load main UI
     @GetMapping("/")
@@ -34,6 +38,13 @@ public class ViewController {
     @GetMapping({"/orders", "/orders.html"})
     public String viewOrders() {
         return "orders";
+    }
+
+    // 🔹 Load kitchen dashboard UI
+    @GetMapping({"/kitchen", "/kitchen.html"})
+    public String viewKitchen(Model model) {
+        model.addAttribute("pendingOrders", kitchenService.getPendingOrders());
+        return "kitchen";
     }
 
     // 🔹 Allocate table

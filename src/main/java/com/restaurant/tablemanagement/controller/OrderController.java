@@ -29,12 +29,11 @@ public class OrderController {
     // ===== GET ORDER BY ID =====
     @GetMapping("/{orderId}")
     public ResponseEntity<Order> getOrderById(@PathVariable String orderId) {
-        try {
-            Order order = orderService.getOrderById(orderId);
-            return ResponseEntity.ok(order);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+        java.util.Optional<Order> order = orderService.getOrderById(orderId);
+        if (order.isPresent()) {
+            return ResponseEntity.ok(order.get());
         }
+        return ResponseEntity.notFound().build();
     }
     
     // ===== GET ORDERS BY TABLE =====
@@ -143,6 +142,28 @@ public class OrderController {
         return ResponseEntity.ok("Rush hour mode: " + (enabled ? "ON" : "OFF"));
     }
     
+    // ===== UPGRADE CUSTOMER TO VIP =====
+    @PostMapping("/customer/{customerId}/vip")
+    public ResponseEntity<String> upgradeCustomerToVIP(@PathVariable String customerId) {
+        try {
+            orderService.upgradeCustomerToVIP(customerId);
+            return ResponseEntity.ok("✨ Customer " + customerId + " upgraded to VIP status!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error upgrading customer: " + e.getMessage());
+        }
+    }
+    
+    // ===== DOWNGRADE CUSTOMER FROM VIP =====
+    @PostMapping("/customer/{customerId}/remove-vip")
+    public ResponseEntity<String> downgradeCustomerFromVIP(@PathVariable String customerId) {
+        try {
+            orderService.downgradeCustomerFromVIP(customerId);
+            return ResponseEntity.ok("Customer " + customerId + " VIP status removed.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error downgrading customer: " + e.getMessage());
+        }
+    }
+
     // ===== LOAD ORDERS UI =====
     @GetMapping("/orders")
     public String ordersPage() {
