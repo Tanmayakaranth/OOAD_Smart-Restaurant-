@@ -1,0 +1,543 @@
+{
+    "location": "Sarakki Signal, Bangalore",
+    "center": {
+        "latitude": 12.9102,
+        "longitude": 77.5638
+    },
+    "roads": [
+        "Kanakapura_Road",
+        "Outer_Ring_Road",
+        "JP_Nagar_7th_Phase",
+        "Service_Road"
+    ],
+    "snappedPoints": [
+        {
+            "location": {
+                "latitude": 12.908468,
+                "longitude": 77.563535
+            },
+            "originalIndex": 0,
+            "placeId": "ChIJ_sarakki_Kanakapura_Road",
+            "roadName": "Kanakapura_Road",
+            "speed": 19,
+            "trafficLevel": "moderate",
+            "delay": 114
+        },
+        {
+            "location": {
+                "latitude": 12.908817,
+                "longitude": 77.563582
+            },
+            "originalIndex": 1,
+            "placeId": "ChIJ_sarakki_Kanakapura_Road",
+            "roadName": "Kanakapura_Road",
+            "speed": 9,
+            "trafficLevel": "high",
+            "delay": 10
+        },
+        {
+            "location": {
+                "latitude": 12.909155,
+                "longitude": 77.563658
+            },
+            "originalIndex": 2,
+            "placeId": "ChIJ_sarakki_Kanakapura_Road",
+            "roadName": "Kanakapura_Road",
+            "speed": 20,
+            "trafficLevel": "moderate",
+            "delay": 38
+        },
+        {
+            "location": {
+                "latitude": 12.909504,
+                "longitude": 77.563701
+            },
+            "originalIndex": 3,
+            "placeId": "ChIJ_sarakki_Kanakapura_Road",
+            "roadName": "Kanakapura_Road",
+            "speed": 11,
+            "trafficLevel": "low",
+            "delay": 102
+        },
+        {
+            "location": {
+                "latitude": 12.909846,
+                "longitude": 77.563748
+            },
+            "originalIndex": 4,
+            "placeId": "ChIJ_sarakki_Kanakapura_Road",
+            "roadName": "Kanakapura_Road",
+            "speed": 39,
+            "trafficLevel": "low",
+            "delay": 85
+        },
+        {
+            "location": {
+                "latitude": 12.910198,
+                "longitude": 77.56381
+            },
+            "originalIndex": 5,
+            "placeId": "ChIJ_sarakki_Kanakapura_Road",
+            "roadName": "Kanakapura_Road",
+            "speed": 40,
+            "trafficLevel": "low",
+            "delay": 77
+        },
+        {
+            "location": {
+                "latitude": 12.910568,
+                "longitude": 77.563869
+            },
+            "originalIndex": 6,
+            "placeId": "ChIJ_sarakki_Kanakapura_Road",
+            "roadName": "Kanakapura_Road",
+            "speed": 15,
+            "trafficLevel": "high",
+            "delay": 46
+        },
+        {
+            "location": {
+                "latitude": 12.910903,
+                "longitude": 77.563881
+            },
+            "originalIndex": 7,
+            "placeId": "ChIJ_sarakki_Kanakapura_Road",
+            "roadName": "Kanakapura_Road",
+            "speed": 8,
+            "trafficLevel": "low",
+            "delay": 43
+        },
+        {
+            "location": {
+                "latitude": 12.91124,
+                "longitude": 77.563946
+            },
+            "originalIndex": 8,
+            "placeId": "ChIJ_sarakki_Kanakapura_Road",
+            "roadName": "Kanakapura_Road",
+            "speed": 19,
+            "trafficLevel": "low",
+            "delay": 92
+        },
+        {
+            "location": {
+                "latitude": 12.911596,
+                "longitude": 77.564017
+            },
+            "originalIndex": 9,
+            "placeId": "ChIJ_sarakki_Kanakapura_Road",
+            "roadName": "Kanakapura_Road",
+            "speed": 7,
+            "trafficLevel": "moderate",
+            "delay": 116
+        },
+        {
+            "location": {
+                "latitude": 12.911941,
+                "longitude": 77.564064
+            },
+            "originalIndex": 10,
+            "placeId": "ChIJ_sarakki_Kanakapura_Road",
+            "roadName": "Kanakapura_Road",
+            "speed": 25,
+            "trafficLevel": "low",
+            "delay": 75
+        },
+        {
+            "location": {
+                "latitude": 12.909946,
+                "longitude": 77.562045
+            },
+            "originalIndex": 11,
+            "placeId": "ChIJ_sarakki_Outer_Ring_Road",
+            "roadName": "Outer_Ring_Road",
+            "speed": 21,
+            "trafficLevel": "high",
+            "delay": 49
+        },
+        {
+            "location": {
+                "latitude": 12.909987,
+                "longitude": 77.562394
+            },
+            "originalIndex": 12,
+            "placeId": "ChIJ_sarakki_Outer_Ring_Road",
+            "roadName": "Outer_Ring_Road",
+            "speed": 14,
+            "trafficLevel": "high",
+            "delay": 87
+        },
+        {
+            "location": {
+                "latitude": 12.910063,
+                "longitude": 77.562753
+            },
+            "originalIndex": 13,
+            "placeId": "ChIJ_sarakki_Outer_Ring_Road",
+            "roadName": "Outer_Ring_Road",
+            "speed": 16,
+            "trafficLevel": "low",
+            "delay": 59
+        },
+        {
+            "location": {
+                "latitude": 12.910101,
+                "longitude": 77.563095
+            },
+            "originalIndex": 14,
+            "placeId": "ChIJ_sarakki_Outer_Ring_Road",
+            "roadName": "Outer_Ring_Road",
+            "speed": 20,
+            "trafficLevel": "moderate",
+            "delay": 38
+        },
+        {
+            "location": {
+                "latitude": 12.910131,
+                "longitude": 77.563455
+            },
+            "originalIndex": 15,
+            "placeId": "ChIJ_sarakki_Outer_Ring_Road",
+            "roadName": "Outer_Ring_Road",
+            "speed": 42,
+            "trafficLevel": "low",
+            "delay": 109
+        },
+        {
+            "location": {
+                "latitude": 12.910187,
+                "longitude": 77.563812
+            },
+            "originalIndex": 16,
+            "placeId": "ChIJ_sarakki_Outer_Ring_Road",
+            "roadName": "Outer_Ring_Road",
+            "speed": 11,
+            "trafficLevel": "moderate",
+            "delay": 22
+        },
+        {
+            "location": {
+                "latitude": 12.910258,
+                "longitude": 77.564132
+            },
+            "originalIndex": 17,
+            "placeId": "ChIJ_sarakki_Outer_Ring_Road",
+            "roadName": "Outer_Ring_Road",
+            "speed": 39,
+            "trafficLevel": "moderate",
+            "delay": 22
+        },
+        {
+            "location": {
+                "latitude": 12.910282,
+                "longitude": 77.564496
+            },
+            "originalIndex": 18,
+            "placeId": "ChIJ_sarakki_Outer_Ring_Road",
+            "roadName": "Outer_Ring_Road",
+            "speed": 23,
+            "trafficLevel": "moderate",
+            "delay": 69
+        },
+        {
+            "location": {
+                "latitude": 12.910353,
+                "longitude": 77.564839
+            },
+            "originalIndex": 19,
+            "placeId": "ChIJ_sarakki_Outer_Ring_Road",
+            "roadName": "Outer_Ring_Road",
+            "speed": 16,
+            "trafficLevel": "moderate",
+            "delay": 9
+        },
+        {
+            "location": {
+                "latitude": 12.910411,
+                "longitude": 77.565198
+            },
+            "originalIndex": 20,
+            "placeId": "ChIJ_sarakki_Outer_Ring_Road",
+            "roadName": "Outer_Ring_Road",
+            "speed": 25,
+            "trafficLevel": "low",
+            "delay": 56
+        },
+        {
+            "location": {
+                "latitude": 12.910459,
+                "longitude": 77.565558
+            },
+            "originalIndex": 21,
+            "placeId": "ChIJ_sarakki_Outer_Ring_Road",
+            "roadName": "Outer_Ring_Road",
+            "speed": 26,
+            "trafficLevel": "high",
+            "delay": 61
+        },
+        {
+            "location": {
+                "latitude": 12.911719,
+                "longitude": 77.564063
+            },
+            "originalIndex": 22,
+            "placeId": "ChIJ_sarakki_JP_Nagar_7th_Phase",
+            "roadName": "JP_Nagar_7th_Phase",
+            "speed": 28,
+            "trafficLevel": "low",
+            "delay": 110
+        },
+        {
+            "location": {
+                "latitude": 12.911399,
+                "longitude": 77.563997
+            },
+            "originalIndex": 23,
+            "placeId": "ChIJ_sarakki_JP_Nagar_7th_Phase",
+            "roadName": "JP_Nagar_7th_Phase",
+            "speed": 34,
+            "trafficLevel": "high",
+            "delay": 60
+        },
+        {
+            "location": {
+                "latitude": 12.91108,
+                "longitude": 77.563958
+            },
+            "originalIndex": 24,
+            "placeId": "ChIJ_sarakki_JP_Nagar_7th_Phase",
+            "roadName": "JP_Nagar_7th_Phase",
+            "speed": 31,
+            "trafficLevel": "low",
+            "delay": 70
+        },
+        {
+            "location": {
+                "latitude": 12.910782,
+                "longitude": 77.56391
+            },
+            "originalIndex": 25,
+            "placeId": "ChIJ_sarakki_JP_Nagar_7th_Phase",
+            "roadName": "JP_Nagar_7th_Phase",
+            "speed": 11,
+            "trafficLevel": "moderate",
+            "delay": 82
+        },
+        {
+            "location": {
+                "latitude": 12.910483,
+                "longitude": 77.563854
+            },
+            "originalIndex": 26,
+            "placeId": "ChIJ_sarakki_JP_Nagar_7th_Phase",
+            "roadName": "JP_Nagar_7th_Phase",
+            "speed": 23,
+            "trafficLevel": "moderate",
+            "delay": 92
+        },
+        {
+            "location": {
+                "latitude": 12.910199,
+                "longitude": 77.56381
+            },
+            "originalIndex": 27,
+            "placeId": "ChIJ_sarakki_JP_Nagar_7th_Phase",
+            "roadName": "JP_Nagar_7th_Phase",
+            "speed": 9,
+            "trafficLevel": "high",
+            "delay": 51
+        },
+        {
+            "location": {
+                "latitude": 12.909907,
+                "longitude": 77.563761
+            },
+            "originalIndex": 28,
+            "placeId": "ChIJ_sarakki_JP_Nagar_7th_Phase",
+            "roadName": "JP_Nagar_7th_Phase",
+            "speed": 6,
+            "trafficLevel": "low",
+            "delay": 12
+        },
+        {
+            "location": {
+                "latitude": 12.909587,
+                "longitude": 77.563712
+            },
+            "originalIndex": 29,
+            "placeId": "ChIJ_sarakki_JP_Nagar_7th_Phase",
+            "roadName": "JP_Nagar_7th_Phase",
+            "speed": 25,
+            "trafficLevel": "low",
+            "delay": 44
+        },
+        {
+            "location": {
+                "latitude": 12.909282,
+                "longitude": 77.563645
+            },
+            "originalIndex": 30,
+            "placeId": "ChIJ_sarakki_JP_Nagar_7th_Phase",
+            "roadName": "JP_Nagar_7th_Phase",
+            "speed": 36,
+            "trafficLevel": "high",
+            "delay": 80
+        },
+        {
+            "location": {
+                "latitude": 12.909019,
+                "longitude": 77.563582
+            },
+            "originalIndex": 31,
+            "placeId": "ChIJ_sarakki_JP_Nagar_7th_Phase",
+            "roadName": "JP_Nagar_7th_Phase",
+            "speed": 44,
+            "trafficLevel": "moderate",
+            "delay": 19
+        },
+        {
+            "location": {
+                "latitude": 12.908714,
+                "longitude": 77.563563
+            },
+            "originalIndex": 32,
+            "placeId": "ChIJ_sarakki_JP_Nagar_7th_Phase",
+            "roadName": "JP_Nagar_7th_Phase",
+            "speed": 43,
+            "trafficLevel": "moderate",
+            "delay": 108
+        },
+        {
+            "location": {
+                "latitude": 12.910433,
+                "longitude": 77.565289
+            },
+            "originalIndex": 33,
+            "placeId": "ChIJ_sarakki_Service_Road",
+            "roadName": "Service_Road",
+            "speed": 14,
+            "trafficLevel": "high",
+            "delay": 27
+        },
+        {
+            "location": {
+                "latitude": 12.910405,
+                "longitude": 77.564993
+            },
+            "originalIndex": 34,
+            "placeId": "ChIJ_sarakki_Service_Road",
+            "roadName": "Service_Road",
+            "speed": 39,
+            "trafficLevel": "moderate",
+            "delay": 48
+        },
+        {
+            "location": {
+                "latitude": 12.91034,
+                "longitude": 77.564711
+            },
+            "originalIndex": 35,
+            "placeId": "ChIJ_sarakki_Service_Road",
+            "roadName": "Service_Road",
+            "speed": 30,
+            "trafficLevel": "moderate",
+            "delay": 100
+        },
+        {
+            "location": {
+                "latitude": 12.910286,
+                "longitude": 77.564385
+            },
+            "originalIndex": 36,
+            "placeId": "ChIJ_sarakki_Service_Road",
+            "roadName": "Service_Road",
+            "speed": 11,
+            "trafficLevel": "high",
+            "delay": 93
+        },
+        {
+            "location": {
+                "latitude": 12.91024,
+                "longitude": 77.564094
+            },
+            "originalIndex": 37,
+            "placeId": "ChIJ_sarakki_Service_Road",
+            "roadName": "Service_Road",
+            "speed": 41,
+            "trafficLevel": "high",
+            "delay": 25
+        },
+        {
+            "location": {
+                "latitude": 12.9102,
+                "longitude": 77.563808
+            },
+            "originalIndex": 38,
+            "placeId": "ChIJ_sarakki_Service_Road",
+            "roadName": "Service_Road",
+            "speed": 10,
+            "trafficLevel": "moderate",
+            "delay": 23
+        },
+        {
+            "location": {
+                "latitude": 12.910136,
+                "longitude": 77.563513
+            },
+            "originalIndex": 39,
+            "placeId": "ChIJ_sarakki_Service_Road",
+            "roadName": "Service_Road",
+            "speed": 40,
+            "trafficLevel": "moderate",
+            "delay": 119
+        },
+        {
+            "location": {
+                "latitude": 12.91009,
+                "longitude": 77.563202
+            },
+            "originalIndex": 40,
+            "placeId": "ChIJ_sarakki_Service_Road",
+            "roadName": "Service_Road",
+            "speed": 15,
+            "trafficLevel": "high",
+            "delay": 65
+        },
+        {
+            "location": {
+                "latitude": 12.910047,
+                "longitude": 77.562892
+            },
+            "originalIndex": 41,
+            "placeId": "ChIJ_sarakki_Service_Road",
+            "roadName": "Service_Road",
+            "speed": 14,
+            "trafficLevel": "moderate",
+            "delay": 12
+        },
+        {
+            "location": {
+                "latitude": 12.909991,
+                "longitude": 77.562596
+            },
+            "originalIndex": 42,
+            "placeId": "ChIJ_sarakki_Service_Road",
+            "roadName": "Service_Road",
+            "speed": 38,
+            "trafficLevel": "low",
+            "delay": 79
+        },
+        {
+            "location": {
+                "latitude": 12.909962,
+                "longitude": 77.562281
+            },
+            "originalIndex": 43,
+            "placeId": "ChIJ_sarakki_Service_Road",
+            "roadName": "Service_Road",
+            "speed": 39,
+            "trafficLevel": "high",
+            "delay": 92
+        }
+    ]
+}

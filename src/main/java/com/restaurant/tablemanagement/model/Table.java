@@ -6,12 +6,14 @@ public class Table {
     private TableStatus status;
     private long cleaningEndTime;
     private Integer customerId;  // Tracks which customer (if any) is at this table
+    private boolean isVIP;  // 🔥 NEW: Track if seated customer is VIP
 
     public Table(int tableId, int capacity) {
         this.tableId = tableId;
         this.capacity = capacity;
         this.status = TableStatus.AVAILABLE;
         this.customerId = null;
+        this.isVIP = false;
     }
 
     public int getTableId() { return tableId; }
@@ -22,4 +24,6 @@ public class Table {
     public void setCleaningEndTime(long time) { this.cleaningEndTime = time; }
     public Integer getCustomerId() { return customerId; }
     public void setCustomerId(Integer customerId) { this.customerId = customerId; }
+    public boolean isVIP() { return isVIP; }  // 🔥 NEW
+    public void setVIP(boolean vip) { this.isVIP = vip; }  // 🔥 NEW
 }

@@ -247,6 +247,7 @@
                 <th>Table</th>
                 <th>Status</th>
                 <th>Capacity</th>
+                <th>VIP</th>  <!-- 🔥 NEW: VIP column -->
                 <th>Active Orders</th>
             </tr>
         </thead>
@@ -371,13 +372,15 @@ function loadTableDropdown() {
                 const canonicalId = `TABLE-${table.tableId}`;
                 const status = table.status;
                 const customerInfo = table.customerId ? ` (Cust: ${table.customerId})` : '';
-                const optionText = `${canonicalId} - ${status}${customerInfo} (Cap: ${table.capacity})`;
+                const vipIndicator = table.isVIP ? ' 👑VIP' : '';  // 🔥 NEW: VIP indicator
+                const optionText = `${canonicalId} - ${status}${customerInfo}${vipIndicator} (Cap: ${table.capacity})`;
                 
                 const option = document.createElement('option');
                 option.value = canonicalId;
                 option.text = optionText;
                 option.dataset.customerId = table.customerId || '';
                 option.dataset.status = status;
+                option.dataset.isVIP = table.isVIP || false;  // 🔥 NEW: Store VIP flag
                 tableSelect.appendChild(option);
             });
             
@@ -396,12 +399,22 @@ function onTableSelected() {
     if (!selectedOption.value) {
         // Placeholder selected, clear customer
         document.getElementById('customerId').value = '';
+        document.getElementById('orderPriority').value = 'NORMAL';
         return;
     }
     
     const customerId = selectedOption.dataset.customerId;
     if (customerId) {
         document.getElementById('customerId').value = customerId;
+    }
+    
+    // 🔥 NEW: Auto-set priority to VIP if table is VIP
+    const isVIP = selectedOption.dataset.isVIP === 'true';
+    if (isVIP) {
+        document.getElementById('orderPriority').value = 'VIP';
+        console.log('✅ VIP Table selected - Priority auto-set to VIP');
+    } else {
+        document.getElementById('orderPriority').value = 'NORMAL';
     }
 }
 
@@ -508,11 +521,13 @@ function refreshData() {
             visibleTables.forEach(t => {
                 const tableKey = `TABLE-${t.tableId}`;
                 const activeCount = activeOrderCountByTable[tableKey] || 0;
+                const vipBadge = t.isVIP ? '<span style="background-color: #ffd700; color: black; padding: 2px 6px; border-radius: 4px; font-weight: bold;">👑 VIP</span>' : '—';  // 🔥 NEW
                 const row = `
                     <tr>
                         <td>${tableKey}</td>
                         <td><span class="status-pill status-${t.status}">${t.status}</span></td>
                         <td>${t.capacity}</td>
+                        <td>${vipBadge}</td>  <!-- 🔥 NEW: VIP column -->
                         <td>${activeCount}</td>
                     </tr>
                 `;

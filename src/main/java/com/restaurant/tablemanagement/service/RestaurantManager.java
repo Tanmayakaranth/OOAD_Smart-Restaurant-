@@ -37,6 +37,7 @@ public class RestaurantManager {
         if (best != null) {
             best.setStatus(TableStatus.OCCUPIED);
             best.setCustomerId(customer.getCustomerId());
+            best.setVIP(customer.isVIP());  // 🔥 NEW: Link VIP status to table
             return best;
         }
 
@@ -51,6 +52,7 @@ public class RestaurantManager {
                 t.setStatus(TableStatus.CLEANING);
                 t.setCleaningEndTime(System.currentTimeMillis() + 5000);
                 t.setCustomerId(null);  // Clear customer when table is freed
+                t.setVIP(false);  // 🔥 NEW: Clear VIP flag
 
                 System.out.println("Table " + id + " is CLEANING");
                 break;
@@ -72,6 +74,7 @@ public class RestaurantManager {
                 // Step 1: Available
                 t.setStatus(TableStatus.AVAILABLE);
                 t.setCleaningEndTime(0);
+                t.setVIP(false);  // 🔥 NEW: Reset VIP flag for next customer
 
                 // Step 2: Assign best customer
                 assignBestCustomer(t);
@@ -106,6 +109,7 @@ public class RestaurantManager {
 
         table.setStatus(TableStatus.OCCUPIED);
         table.setCustomerId(chosen.getCustomerId());
+        table.setVIP(chosen.isVIP());  // 🔥 NEW: Link VIP status to table
         waitlist.remove(chosen);
 
         System.out.println("Assigned Table " + table.getTableId() +

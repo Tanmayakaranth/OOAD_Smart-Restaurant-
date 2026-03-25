@@ -21,6 +21,11 @@ public class OrderService {
         this.orderQueue = new OrderPriorityQueue();
     }
     
+    // 🔥 SETTER for testing/dependency injection
+    public void setRestaurantManager(RestaurantManager manager) {
+        this.restaurantManager = manager;
+    }
+    
     // ===== CREATE ORDER (Factory Pattern) =====
     public Order createOrder(OrderRequest request) {
         if (request == null || request.getItems() == null || request.getItems().isEmpty()) {
@@ -43,11 +48,17 @@ public class OrderService {
 
         restaurantManager.occupyTable(tableNumber);
 
+        // 🔥 NEW: Auto-set VIP priority if customer is seated at a VIP table
+        OrderPriority priority = request.getOrderPriority();
+        if (priority == null) {
+            priority = table.isVIP() ? OrderPriority.VIP : OrderPriority.NORMAL;
+        }
+
         // Create new order
         Order order = new Order(
             request.getCustomerId(),
             toCanonicalTableId(tableNumber),
-            request.getOrderPriority() != null ? request.getOrderPriority() : OrderPriority.NORMAL
+            priority
         );
         
         // Add items from request

@@ -124,6 +124,7 @@
                     <th>ID</th>
                     <th>Capacity</th>
                     <th>Status</th>
+                    <th>VIP</th>  <!-- 🔥 NEW: VIP column -->
                     <th>Active Orders</th>
                     <th>Action</th>
                 </tr>
@@ -184,6 +185,7 @@ function refreshData() {
             data.tables.forEach(t => {
                 const canonicalTableId = `TABLE-${t.tableId}`;
                 const activeOrderCount = orderCountByTable[canonicalTableId] || 0;
+                const vipBadge = t.isVIP ? '<span style="background-color: #ffd700; color: black; padding: 2px 6px; border-radius: 4px; font-weight: bold;">👑 VIP</span>' : '—';  // 🔥 NEW
                 let row = `
                     <tr>
                         <td>${t.tableId}</td>
@@ -192,6 +194,7 @@ function refreshData() {
                             ${t.status}
                             ${t.status === 'CLEANING' ? '(Cleaning...)' : ''}
                         </td>
+                        <td>${vipBadge}</td>  <!-- 🔥 NEW: VIP column -->
                         <td><strong>${activeOrderCount}</strong></td>
                         <td>
                             <form action="/free/${t.tableId}" method="post">
