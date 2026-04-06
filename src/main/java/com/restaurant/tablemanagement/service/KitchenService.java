@@ -4,6 +4,8 @@ import com.restaurant.tablemanagement.controller.KitchenWebSocketController;
 import com.restaurant.tablemanagement.dto.KitchenUpdateMessage;
 import com.restaurant.tablemanagement.model.Order;
 import com.restaurant.tablemanagement.model.OrderStatus;
+import com.restaurant.billing.service.BillingService;
+import com.restaurant.billing.service.DashboardService;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +40,12 @@ public class KitchenService {
      * Constructor initializing the KitchenService with its dependencies.
      * 
      * @param orderService The OrderService for order management
+     * @param billingService The BillingService for billing operations
+     * @param dashboardService The DashboardService for dashboard updates
      */
-    public KitchenService(OrderService orderService) {
+    public KitchenService(OrderService orderService, BillingService billingService, DashboardService dashboardService) {
         this.orderService = orderService;
-        this.kitchenQueue = new KitchenQueue();
+        this.kitchenQueue = new KitchenQueue(billingService, dashboardService);
     }
     
     /**

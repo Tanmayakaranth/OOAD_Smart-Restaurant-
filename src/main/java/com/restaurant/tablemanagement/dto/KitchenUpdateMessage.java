@@ -22,7 +22,22 @@ public class KitchenUpdateMessage {
     public static final String UPDATE_TYPE_ORDER_COMPLETED = "ORDER_COMPLETED";
     public static final String UPDATE_TYPE_STRATEGY_CHANGED = "STRATEGY_CHANGED";
     public static final String UPDATE_TYPE_FULL_REFRESH = "FULL_REFRESH";
-    
+
+    public void setTimestamp(long timestamp) {
+    this.timestamp = timestamp;
+    }
+
+    public void setUpdateType(String updateType) { this.updateType = updateType; }
+    public void setOrder(Order order) { this.order = order; }
+    public void setStatistics(Object statistics) {
+    this.statistics = statistics;
+    }
+    public void setCurrentStrategy(String currentStrategy) {
+    this.currentStrategy = currentStrategy;
+    }
+    public void setPendingOrders(List<Order> pendingOrders) { this.pendingOrders = pendingOrders; }
+    public void setPreparingOrders(List<Order> preparingOrders) { this.preparingOrders = preparingOrders; }
+    public void setReadyOrders(List<Order> readyOrders) { this.readyOrders = readyOrders; }
     /**
      * Type of update (ORDER_ADDED, ORDER_STARTED, ORDER_READY, ORDER_COMPLETED, STRATEGY_CHANGED, FULL_REFRESH)
      */
@@ -73,9 +88,11 @@ public class KitchenUpdateMessage {
      */
     public static KitchenUpdateMessage orderAdded(Order order) {
         KitchenUpdateMessage msg = new KitchenUpdateMessage();
+
         msg.setUpdateType(UPDATE_TYPE_ORDER_ADDED);
         msg.setOrder(order);
         msg.setTimestamp(System.currentTimeMillis());
+
         return msg;
     }
     
