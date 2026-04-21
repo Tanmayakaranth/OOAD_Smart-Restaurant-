@@ -1,0 +1,101 @@
+================================================================================
+Available Java Versions for Linux 64bit
+================================================================================
+ Vendor        | Use | Version      | Dist    | Status     | Identifier
+--------------------------------------------------------------------------------
+ Corretto      |     | 26           | amzn    |            | 26-amzn             
+               |     | 25.0.2       | amzn    |            | 25.0.2-amzn         
+               |     | 24.0.2       | amzn    |            | 24.0.2-amzn         
+               |     | 23.0.2       | amzn    |            | 23.0.2-amzn         
+               |     | 21.0.10      | amzn    |            | 21.0.10-amzn        
+               |     | 17.0.18      | amzn    |            | 17.0.18-amzn        
+               |     | 11.0.30      | amzn    |            | 11.0.30-amzn        
+               |     | 8.0.472      | amzn    |            | 8.0.472-amzn        
+ Dragonwell    |     | 21.0.10      | albba   |            | 21.0.10-albba       
+               |     | 21.0.9       | albba   |            | 21.0.9-albba        
+               |     | 17.0.18      | albba   |            | 17.0.18-albba       
+               |     | 11.0.30      | albba   |            | 11.0.30-albba       
+               |     | 11.0.29      | albba   |            | 11.0.29-albba       
+               |     | 8.0.482      | albba   |            | 8.0.482-albba       
+               |     | 8.0.472      | albba   |            | 8.0.472-albba       
+ Gluon         |     | 22.1.0.1.r17 | gln     |            | 22.1.0.1.r17-gln    
+               |     | 22.1.0.1.r11 | gln     |            | 22.1.0.1.r11-gln    
+ GraalVM CE    |     | 25.0.2       | graalce |            | 25.0.2-graalce      
+               |     | 24.0.2       | graalce |            | 24.0.2-graalce      
+               |     | 23.0.2       | graalce |            | 23.0.2-graalce      
+               |     | 21.0.2       | graalce |            | 21.0.2-graalce      
+               |     | 17.0.9       | graalce |            | 17.0.9-graalce      
+ GraalVM Oracle|     | 26.ea.13     | graal   |            | 26.ea.13-graal      
+               |     | 25.0.2       | graal   |            | 25.0.2-graal        
+               |     | 24.0.2       | graal   |            | 24.0.2-graal        
+               |     | 23.0.2       | graal   |            | 23.0.2-graal        
+               |     | 21.0.10      | graal   |            | 21.0.10-graal       
+               |     | 17.0.12      | graal   |            | 17.0.12-graal       
+ Huawei        |     | 21.0.10      | bisheng |            | 21.0.10-bisheng     
+               |     | 21.0.9       | bisheng |            | 21.0.9-bisheng      
+               |     | 17.0.18      | bisheng |            | 17.0.18-bisheng     
+               |     | 17.0.17      | bisheng |            | 17.0.17-bisheng     
+               |     | 11.0.30      | bisheng |            | 11.0.30-bisheng     
+               |     | 11.0.29      | bisheng |            | 11.0.29-bisheng     
+               |     | 8.0.482      | bisheng |            | 8.0.482-bisheng     
+               |     | 8.0.472      | bisheng |            | 8.0.472-bisheng     
+ Java.net      |     | 27.ea.13     | open    |            | 27.ea.13-open       
+               |     | 27.ea.12     | open    |            | 27.ea.12-open       
+               |     | 27.ea.11     | open    |            | 27.ea.11-open       
+               |     | 27.ea.10     | open    |            | 27.ea.10-open       
+               |     | 27.ea.9      | open    |            | 27.ea.9-open        
+               |     | 26.ea.35     | open    |            | 26.ea.35-open       
+               |     | 25.0.2       | open    |            | 25.0.2-open         
+               |     | 24.0.2       | open    |            | 24.0.2-open         
+               |     | 23.0.1       | open    |            | 23.0.1-open         
+               |     | 21.0.2       | open    |            | 21.0.2-open         
+ JetBrains     |     | 25.0.2       | jbr     |            | 25.0.2-jbr          
+               |     | 21.0.10      | jbr     |            | 21.0.10-jbr         
+               |     | 17.0.14      | jbr     |            | 17.0.14-jbr         
+               |     | 11.0.14.1    | jbr     |            | 11.0.14.1-jbr       
+ Liberica      |     | 26.fx        | librca  |            | 26.fx-librca        
+               |     | 26           | librca  |            | 26-librca           
+               |     | 25.0.2.fx    | librca  |            | 25.0.2.fx-librca    
+               |     | 25.0.2       | librca  |            | 25.0.2-librca       
+               |     | 24.0.2.fx    | librca  |            | 24.0.2.fx-librca    
+               |     | 24.0.2       | librca  |            | 24.0.2-librca       
+               |     | 23.0.2.fx    | librca  |            | 23.0.2.fx-librca    
+               |     | 23.0.2       | librca  |            | 23.0.2-librca       
+               |     | 21.0.10.crac | librca  |            | 21.0.10.crac-librca 
+               |     | 21.0.10.fx   | librca  |            | 21.0.10.fx-librca   
+               |     | 21.0.10      | librca  |            | 21.0.10-librca      
+               |     | 17.0.18.crac | librca  |            | 17.0.18.crac-librca 
+               |     | 17.0.18.fx   | librca  |            | 17.0.18.fx-librca   
+               |     | 17.0.18      | librca  |            | 17.0.18-librca      
+               |     | 11.0.30.fx   | librca  |            | 11.0.30.fx-librca   
+               |     | 11.0.30      | librca  |            | 11.0.30-librca      
+               |     | 8.0.482.fx   | librca  |            | 8.0.482.fx-librca   
+               |     | 8.0.482      | librca  |            | 8.0.482-librca      
+ Liberica NIK  |     | 25.0.2.r25   | nik     |            | 25.0.2.r25-nik      
+               |     | 25.0.2.fx    | nik     |            | 25.0.2.fx-nik       
+               |     | 24.2.2.r24   | nik     |            | 24.2.2.r24-nik      
+               |     | 24.2.2.fx    | nik     |            | 24.2.2.fx-nik       
+               |     | 23.1.10.r21  | nik     |            | 23.1.10.r21-nik     
+               |     | 23.1.10.fx   | nik     |            | 23.1.10.fx-nik      
+               |     | 23.0.11.r17  | nik     |            | 23.0.11.r17-nik     
+               |     | 22.3.5.r17   | nik     |            | 22.3.5.r17-nik      
+               |     | 22.3.5.r11   | nik     |            | 22.3.5.r11-nik      
+ Mandrel       |     | 25.0.2.r25   | mandrel |            | 25.0.2.r25-mandrel  
+               |     | 24.2.2.r24   | mandrel |            | 24.2.2.r24-mandrel  
+               |     | 23.1.10.r21  | mandrel |            | 23.1.10.r21-mandrel 
+               |     | 22.3.5.r17   | mandrel |            | 22.3.5.r17-mandrel  
+ Microsoft     |     | 25.0.2       | ms      |            | 25.0.2-ms           
+               |     | 25.0.1       | ms      | local only | 25.0.1-ms           
+               |     | 21.0.10      | ms      |            | 21.0.10-ms          
+               |     | 21.0.9       | ms      | local only | 21.0.9-ms           
+               |     | 17.0.18      | ms      |            | 17.0.18-ms          
+               |     | 11.0.30      | ms      |            | 11.0.30-ms          
+ Oracle        |     | 26           | oracle  |            | 26-oracle           
+               |     | 25.0.2       | oracle  |            | 25.0.2-oracle       
+               |     | 24.0.2       | oracle  |            | 24.0.2-oracle       
+               |     | 23.0.2       | oracle  |            | 23.0.2-oracle       
+               |     | 22.0.2       | oracle  |            | 22.0.2-oracle       
+               |     | 21.0.10      | oracle  |            | 21.0.10-oracle      
+               |     | 17.0.12      | oracle  |            | 17.0.12-oracle      
+ SapMachine    |     | 26           | sapmchn |            | 26-sapmchn          
+               |     | 25.0.2       | sapmchn |

@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Restaurant Orders</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 90%;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        td {
+            background-color: white;
+        }
+
+        .CREATED {
+            background-color: #e3f2fd;
+        }
+
+        .PREPARING {
+            background-color: #fff3e0;
+        }
+
+        .READY {
+            background-color: #e8f5e9;
+        }
+
+        .SERVED {
+            background-color: #f3e5f5;
+        }
+
+        .CANCELLED {
+            background-color: #ffebee;
+        }
+
+        button {
+            padding: 6px 12px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 2px;
+        }
+
+        button:hover {
+            background-color: #1976D2;
+        }
+
+        .container {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            flex: 1;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: inline-block;
+            width: 150px;
+            font-weight: bold;
+        }
+
+        input, select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 250px;
+        }
+
+        .form-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .items-list {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .priority-high {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .priority-medium {
+            color: #f57c00;
+            font-weight: bold;
+        }
+
+        .priority-low {
+            color: #388e3c;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #2196F3;
+        }
+
+        .top-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .nav-link {
+            display: inline-block;
+            padding: 8px 14px;
+            text-decoration: none;
+            border-radius: 6px;
+            background-color: #e3f2fd;
+            color: #0d47a1;
+            border: 1px solid #90caf9;
+            font-weight: bold;
+        }
+
+        .nav-link.active {
+            background-color: #2196F3;
+            color: white;
+            border-color: #2196F3;
+        }
+
+        .muted-note {
+            color: #666;
+            margin-bottom: 14px;
+        }
+
+        .mini-table {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .status-pill {
+            border-radius: 12px;
+            padding: 2px 8px;
+            color: white;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        .status-AVAILABLE { background-color: #43a047; }
+        .status-OCCUPIED { background-color: #e53935; }
+        .status-CLEANING { background-color: #f9a825; }
+        .status-RESERVED { background-color: #8e24aa; }
+
+        select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 250px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>📦 Order Management System</h1>
+
+<div class="top-nav">
+    <a class="nav-link" href="/">🪑 Tables</a>
+    <a class="nav-link active" href="/orders">📦 Orders</a>
+    <a class="nav-link" href="/kitchen">🧑‍🍳 Kitchen</a>
+    <a class="nav-link" href="/billing">📊 Billing</a>
+</div>
+
+<div class="muted-note">This page is linked with Tables. Table free/cleaning status affects order creation and active order flow.</div>
+
+<div class="container">
+
+    <!-- ACTIVE ORDERS -->
+    <div class="section">
+        <h2>Active Orders</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Table ID</th>
+                    <th>Customer</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Items</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody id="orders-body"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<div class="form-section">
+    <h2>🔎 Table Snapshot (Live)</h2>
+    <div class="form-group">
+        <label>Focus Table:</label>
+        <input type="text" id="focusedTableId" placeholder="e.g., TABLE-1">
+        <button type="button" onclick="applyFocusedTable()" style="margin-left:10px;">Apply</button>
+        <button type="button" onclick="clearFocusedTable()" style="background-color:#607d8b; margin-left:6px;">Clear</button>
+    </div>
+
+    <table class="mini-table" border="1">
+        <thead>
+            <tr>
+                <th>Table</th>
+                <th>Status</th>
+                <th>Capacity</th>
+                <th>Active Orders</th>
+            </tr>
+        </thead>
+        <tbody id="table-snapshot-body"></tbody>
+    </table>
+</div>
+
+<!-- CREATE ORDER FORM -->
+<div class="form-section">
+    <h2>➕ Create New Order</h2>
+    
+    <div class="form-group">
+        <label>Table ID:</label>
+        <select id="tableId" onchange="onTableSelected()" required>
+            <option value="">-- Select a Table --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Customer ID:</label>
+        <input type="text" id="customerId" placeholder="e.g., CUST-123" required>
+    </div>
+
+    <div class="form-group">
+        <label>Priority:</label>
+        <select id="orderPriority">
+            <option value="NORMAL">NORMAL</option>
+            <option value="VIP">VIP</option>
+            <option value="ONLINE">ONLINE</option>
+            <option value="WALK_IN">WALK_IN</option>
+        </select>
+    </div>
+
+    <h3>Add Items</h3>
+    <div class="form-group">
+        <label>Menu Item ID:</label>
+        <input type="text" id="menuItemId" placeholder="e.g., MENU-001">
+    </div>
+
+    <div class="form-group">
+        <label>Quantity:</label>
+        <input type="number" id="quantity" min="1" value="1">
+    </div>
+
+    <div class="form-group">
+        <label>Special Notes:</label>
+        <input type="text" id="specialNotes" placeholder="e.g., No onions, Extra spice">
+    </div>
+
+    <div class="items-list" id="items-preview">
+        <strong>Items to Add:</strong> (none yet)
+    </div>
+
+    <button type="button" onclick="addItemToForm()">+ Add Item</button>
+    <button type="button" onclick="createOrder()" style="background-color: #4CAF50;">Create Order</button>
+</div>
+
+<!-- PRIORITY QUEUE -->
+<div class="form-section">
+    <h2>👀 Kitchen Queue (Priority Order)</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Position</th>
+                <th>Order ID</th>
+                <th>Priority</th>
+                <th>Items Count</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody id="queue-body"></tbody>
+    </table>
+
+    <div class="info-box">
+        <strong>ℹ️ Orders are sorted by:</strong> VIP(1) → ONLINE(2) → NORMAL(3) → WALK_IN(4)
+    </div>
+
+    <button onclick="toggleRushHour()" style="background-color: #ff9800; width: 200px;">⚡ Rush Hour Mode</button>
+    <span id="rush-status" style="margin-left: 10px; font-weight: bold;"></span>
+</div>
+
+<!-- MANAGE ORDER -->
+<div class="form-section">
+    <h2>⚙️ Manage Order</h2>
+    
+    <div class="form-group">
+        <label>Order ID to Modify:</label>
+        <input type="text" id="modifyOrderId" placeholder="e.g., ORD-1234567890">
+    </div>
+
+    <button onclick="getOrderDetails()" style="background-color: #9C27B0;">View Details</button>
+    <button onclick="cancelOrder()" style="background-color: #f44336;">Cancel Order</button>
+
+    <div id="order-details"></div>
+</div>
+
+<!-- REAL-TIME SCRIPT -->
+<script>
+let itemsToAdd = [];
+let rushHourEnabled = false;
+let focusedTableId = '';
+let allTables = [];  // Store all tables for reference
+
+function normalizeTableId(raw) {
+    if (!raw) return '';
+    const digits = String(raw).toUpperCase().replace(/[^0-9]/g, '');
+    return digits ? `TABLE-${parseInt(digits, 10)}` : String(raw).trim().toUpperCase();
+}
+
+function loadTableDropdown() {
+    fetch('/tables-data')
+        .then(res => res.json())
+        .then(data => {
+            allTables = data.tables;
+            const tableSelect = document.getElementById('tableId');
+            const currentValue = tableSelect.value;  // Preserve current selection
+            
+            // Clear existing options except the placeholder
+            tableSelect.innerHTML = '<option value="">-- Select a Table --</option>';
+            
+            data.tables.forEach(table => {
+                const canonicalId = `TABLE-${table.tableId}`;
+                const status = table.status;
+                const customerInfo = table.customerId ? ` (Cust: ${table.customerId})` : '';
+                const optionText = `${canonicalId} - ${status}${customerInfo} (Cap: ${table.capacity})`;
+                
+                const option = document.createElement('option');
+                option.value = canonicalId;
+                option.text = optionText;
+                option.dataset.customerId = table.customerId || '';
+                option.dataset.status = status;
+                tableSelect.appendChild(option);
+            });
+            
+            // Restore previous selection if it still exists
+            if (currentValue) {
+                tableSelect.value = currentValue;
+            }
+        })
+        .catch(err => console.error('Error loading tables:', err));
+}
+
+function onTableSelected() {
+    const tableSelect = document.getElementById('tableId');
+    const selectedOption = tableSelect.options[tableSelect.selectedIndex];
+    
+    if (!selectedOption.value) {
+        // Placeholder selected, clear customer
+        document.getElementById('customerId').value = '';
+        return;
+    }
+    
+    const customerId = selectedOption.dataset.customerId;
+    if (customerId) {
+        document.getElementById('customerId').value = customerId;
+    }
+}
+
+function applyIncomingTablePrefill() {
+    const params = new URLSearchParams(window.location.search);
+    const paramTable = params.get('tableId');
+    const paramCustomer = params.get('customerId');
+    
+    if (paramTable) {
+        focusedTableId = normalizeTableId(paramTable);
+        document.getElementById('focusedTableId').value = focusedTableId;
+        
+        // Wait a bit for dropdown to populate, then select the table
+        setTimeout(() => {
+            document.getElementById('tableId').value = focusedTableId;
+            onTableSelected();
+        }, 100);
+    }
+    
+    if (paramCustomer && paramCustomer !== 'null' && paramCustomer !== '') {
+        document.getElementById('customerId').value = paramCustomer;
+    }
+}
+
+function applyFocusedTable() {
+    focusedTableId = normalizeTableId(document.getElementById('focusedTableId').value);
+    document.getElementById('focusedTableId').value = focusedTableId;
+    if (focusedTableId) {
+        document.getElementById('tableId').value = focusedTableId;
+    }
+    refreshData();
+}
+
+function clearFocusedTable() {
+    focusedTableId = '';
+    document.getElementById('focusedTableId').value = '';
+    refreshData();
+}
+
+function refreshData() {
+    Promise.all([
+        fetch('/api/orders/active').then(res => res.json()),
+        fetch('/api/orders/queue/view').then(res => res.json()),
+        fetch('/tables-data').then(res => res.json())
+    ])
+        .then(([activeOrders, queueData, tableData]) => {
+            const ordersBody = document.getElementById("orders-body");
+            ordersBody.innerHTML = "";
+
+            const visibleOrders = focusedTableId
+                ? activeOrders.filter(order => order.tableId === focusedTableId)
+                : activeOrders;
+
+            visibleOrders.forEach(order => {
+                let itemCount = order.orderItems ? order.orderItems.length : 0;
+                let priorityClass = 'priority-' + getPriorityClass(order.orderPriority);
+                
+                let row = `
+                    <tr class="${order.orderStatus}">
+                        <td><strong>${order.orderId}</strong></td>
+                        <td>${order.tableId}</td>
+                        <td>${order.customerId}</td>
+                        <td class="${priorityClass}">${order.orderPriority}</td>
+                        <td>${order.orderStatus}</td>
+                        <td>${itemCount}</td>
+                        <td>${order.createdAt}</td>
+                    </tr>
+                `;
+                ordersBody.innerHTML += row;
+            });
+
+            const queueBody = document.getElementById("queue-body");
+            queueBody.innerHTML = "";
+
+            const visibleQueue = focusedTableId
+                ? queueData.filter(order => order.tableId === focusedTableId)
+                : queueData;
+
+            visibleQueue.forEach((order, index) => {
+                let row = `
+                    <tr>
+                        <td><strong>#${index + 1}</strong></td>
+                        <td>${order.orderId}</td>
+                        <td>${order.orderPriority}</td>
+                        <td>${order.orderItems ? order.orderItems.length : 0}</td>
+                        <td>${order.createdAt}</td>
+                    </tr>
+                `;
+                queueBody.innerHTML += row;
+            });
+
+            const snapshotBody = document.getElementById('table-snapshot-body');
+            snapshotBody.innerHTML = '';
+
+            const activeOrderCountByTable = {};
+            activeOrders.forEach(order => {
+                activeOrderCountByTable[order.tableId] = (activeOrderCountByTable[order.tableId] || 0) + 1;
+            });
+
+            const visibleTables = focusedTableId
+                ? tableData.tables.filter(t => `TABLE-${t.tableId}` === focusedTableId)
+                : tableData.tables;
+
+            visibleTables.forEach(t => {
+                const tableKey = `TABLE-${t.tableId}`;
+                const activeCount = activeOrderCountByTable[tableKey] || 0;
+                const row = `
+                    <tr>
+                        <td>${tableKey}</td>
+                        <td><span class="status-pill status-${t.status}">${t.status}</span></td>
+                        <td>${t.capacity}</td>
+                        <td>${activeCount}</td>
+                    </tr>
+                `;
+                snapshotBody.innerHTML += row;
+            });
+        })
+        .catch(err => console.error('Error refreshing orders view:', err));
+}
+
+function getPriorityClass(priority) {
+    if (priority === 'VIP' || priority === 'ONLINE') return 'high';
+    if (priority === 'NORMAL') return 'medium';
+    return 'low';
+}
+
+function addItemToForm() {
+    const menuItemId = document.getElementById('menuItemId').value;
+    const quantity = document.getElementById('quantity').value;
+    const notes = document.getElementById('specialNotes').value;
+
+    if (!menuItemId || !quantity) {
+        alert('Please fill in Menu Item ID and Quantity');
+        return;
+    }
+
+    itemsToAdd.push({
+        menuItemId: menuItemId,
+        quantity: parseInt(quantity),
+        specialNotes: notes || ''
+    });
+
+    updateItemsPreview();
+    clearItemForm();
+}
+
+function updateItemsPreview() {
+    const preview = document.getElementById('items-preview');
+    if (itemsToAdd.length === 0) {
+        preview.innerHTML = '<strong>Items to Add:</strong> (none yet)';
+        return;
+    }
+
+    let html = '<strong>Items to Add:</strong>';
+    itemsToAdd.forEach((item, idx) => {
+        html += `
+            <div class="item-row">
+                <span>${item.menuItemId} × ${item.quantity} ${item.specialNotes ? '(' + item.specialNotes + ')' : ''}</span>
+                <button type="button" onclick="removeItem(${idx})" style="background-color: #f44336; padding: 4px 8px;">Remove</button>
+            </div>
+        `;
+    });
+    preview.innerHTML = html;
+}
+
+function removeItem(idx) {
+    itemsToAdd.splice(idx, 1);
+    updateItemsPreview();
+}
+
+function clearItemForm() {
+    document.getElementById('menuItemId').value = '';
+    document.getElementById('quantity').value = '1';
+    document.getElementById('specialNotes').value = '';
+}
+
+function createOrder() {
+    const tableId = normalizeTableId(document.getElementById('tableId').value);
+    const customerId = document.getElementById('customerId').value;
+    const priority = document.getElementById('orderPriority').value;
+
+    document.getElementById('tableId').value = tableId;
+
+    if (!tableId || !customerId || itemsToAdd.length === 0) {
+        alert('Fill Table ID, Customer ID, and add at least 1 item');
+        return;
+    }
+
+    const orderData = {
+        tableId: tableId,
+        customerId: customerId,
+        orderPriority: priority,
+        items: itemsToAdd
+    };
+
+    fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+    })
+    .then(res => res.json())
+    .then(order => {
+        alert('✅ Order created: ' + order.orderId);
+        itemsToAdd = [];
+        document.getElementById('tableId').value = '';
+        document.getElementById('customerId').value = '';
+        document.getElementById('orderPriority').value = 'NORMAL';
+        updateItemsPreview();
+        refreshData();
+    })
+    .catch(err => alert('❌ Error: ' + err));
+}
+
+function getOrderDetails() {
+    const orderId = document.getElementById('modifyOrderId').value;
+    if (!orderId) {
+        alert('Enter Order ID');
+        return;
+    }
+
+    fetch(`/api/orders/${orderId}`)
+        .then(res => res.json())
+        .then(order => {
+            let html = `
+                <div class="info-box">
+                    <h3>Order: ${order.orderId}</h3>
+                    <p><strong>Table:</strong> ${order.tableId}</p>
+                    <p><strong>Customer:</strong> ${order.customerId}</p>
+                    <p><strong>Priority:</strong> ${order.orderPriority}</p>
+                    <p><strong>Status:</strong> ${order.orderStatus}</p>
+                    <p><strong>Total Amount:</strong> ₹${order.totalAmount}</p>
+                    
+                    <h4>Items:</h4>
+                    <ul>
+            `;
+            order.orderItems.forEach(item => {
+                html += `<li>${item.menuItemId} × ${item.quantity} ${item.specialNotes ? '('+item.specialNotes+')' : ''}</li>`;
+            });
+            html += `</ul></div>`;
+            document.getElementById('order-details').innerHTML = html;
+        })
+        .catch(err => alert('❌ Order not found'));
+}
+
+function cancelOrder() {
+    const orderId = document.getElementById('modifyOrderId').value;
+    if (!orderId) {
+        alert('Enter Order ID');
+        return;
+    }
+
+    if (!confirm('Cancel this order?')) return;
+
+    fetch(`/api/orders/${orderId}`, { method: 'DELETE' })
+        .then(res => res.json())
+        .then(order => {
+            alert('✅ Order cancelled: ' + order.orderId);
+            document.getElementById('order-details').innerHTML = '';
+            refreshData();
+        })
+        .catch(err => alert('❌ Error: ' + err));
+}
+
+function toggleRushHour() {
+    rushHourEnabled = !rushHourEnabled;
+    const status = document.getElementById('rush-status');
+    status.textContent = rushHourEnabled ? '🔴 RUSH HOUR ON' : '🟢 NORMAL';
+    status.style.color = rushHourEnabled ? '#ff5252' : '#4caf50';
+
+    fetch(`/api/orders/rush-hour?enabled=${rushHourEnabled}`, { method: 'PUT' })
+        .then(res => res.json())
+        .then(msg => refreshData())
+        .catch(err => console.error('Error:', err));
+}
+
+// 🔁 Refresh every 2 seconds
+setInterval(refreshData, 2000);
+
+// Refresh table dropdown every 3 seconds (less frequent than data refresh)
+setInterval(loadTableDropdown, 3000);
+
+// Initial load
+loadTableDropdown();
+applyIncomingTablePrefill();
+refreshData();
+</script>
+
+</body>
+</html>

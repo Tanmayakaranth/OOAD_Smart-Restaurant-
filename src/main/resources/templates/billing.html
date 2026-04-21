@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Billing Dashboard</title>
+    
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 90%;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #9C27B0;
+            color: white;
+            font-weight: bold;
+        }
+
+        td {
+            background-color: white;
+        }
+
+        button {
+            padding: 6px 12px;
+            background-color: #9C27B0;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 2px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #7B1FA2;
+        }
+
+        .container {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            flex: 1;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .summary-card h3 {
+            color: #9C27B0;
+            margin-top: 0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: inline-block;
+            width: 150px;
+            font-weight: bold;
+        }
+
+        input, select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 250px;
+        }
+
+        .nav-link {
+            display: inline-block;
+            padding: 8px 14px;
+            text-decoration: none;
+            border-radius: 6px;
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+            font-weight: bold;
+        }
+
+        .nav-link.active {
+            background-color: #9C27B0;
+            color: white;
+            border-color: #9C27B0;
+        }
+
+        .muted-note {
+            color: #666;
+            margin-bottom: 14px;
+        }
+
+        .top-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        @media print {
+            .form-section, button, .top-nav {
+                display: none;
+            }
+        }
+
+    </style>
+    
+    <script>
+        // Auto-refresh billing data every 3 seconds
+        function refreshBillingData() {
+            fetch(window.location.origin + '/api/billing/data')
+                .then(response => response.json())
+                .then(data => {
+                    // Update summary cards
+                    document.getElementById('totalRevenue').textContent = data.totalRevenue.toFixed(2);
+                    document.getElementById('totalBills').textContent = data.totalBills;
+                    
+                    // Update table with bills
+                    const tbody = document.getElementById('billsTableBody');
+                    tbody.innerHTML = '';
+                    
+                    if (data.bills && data.bills.length > 0) {
+                        data.bills.forEach(bill => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${bill.billId || ''}</td>
+                                <td>${bill.orderId || ''}</td>
+                                <td>₹ ${bill.totalAmount.toFixed(2)}</td>
+                                <td>₹ ${bill.tax.toFixed(2)}</td>
+                                <td>₹ ${bill.discount.toFixed(2)}</td>
+                                <td><strong>₹ ${bill.finalAmount.toFixed(2)}</strong></td>
+                            `;
+                            tbody.appendChild(row);
+                        });
+                    }
+                })
+                .catch(error => console.error('Error fetching billing data:', error));
+        }
+        
+        // Refresh data on page load and then every 3 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshBillingData();
+            setInterval(refreshBillingData, 3000);
+        });
+    </script></head>
+
+<body>
+
+<h1>💰 Billing Dashboard</h1>
+
+<div class="top-nav">
+    <a class="nav-link" href="/">🪑Tables</a>
+    <a class="nav-link" href="/orders">📦 Orders</a>
+    <a class="nav-link" href="/kitchen">🧑‍🍳 Kitchen</a>
+    <a class="nav-link active" href="/billing">📊 Billing</a>
+    
+</div>
+
+<div class="muted-note">Real-time billing dashboard showing generated bills, total revenue, and automatic updates when orders are served.</div>
+
+
+<div class="container">
+    <div class="section">
+        <div class="summary-card">
+            <h3>Total Revenue</h3>
+            <p style="font-size: 24px; color: #9C27B0; font-weight: bold;">₹ <span id="totalRevenue" th:text="${totalRevenue}"></span></p>
+        </div>
+        <div class="summary-card">
+            <h3>Total Bills</h3>
+            <p style="font-size: 24px; color: #9C27B0; font-weight: bold;"><span id="totalBills" th:text="${totalBills}"></span></p>
+        </div>
+    </div>
+</div>
+
+<!-- Bills List -->
+<h2>All Bills</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Bill ID</th>
+            <th>Order ID</th>
+            <th>Total Amount</th>
+            <th>Tax</th>
+            <th>Discount</th>
+            <th>Final Amount</th>
+        </tr>
+    </thead>
+    <tbody id="billsTableBody">
+        <tr th:each="bill : ${bills}">
+            <td th:text="${bill.billId}"></td>
+            <td th:text="${bill.orderId}"></td>
+            <td>₹ <span th:text="${bill.totalAmount}"></span></td>
+            <td>₹ <span th:text="${bill.tax}"></span></td>
+            <td>₹ <span th:text="${bill.discount}"></span></td>
+            <td><strong>₹ <span th:text="${bill.finalAmount}"></span></strong></td>
+        </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

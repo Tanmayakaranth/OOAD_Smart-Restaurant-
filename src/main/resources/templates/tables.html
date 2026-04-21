@@ -62,12 +62,60 @@
         .section {
             flex: 1;
         }
+
+        .top-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .nav-link {
+            display: inline-block;
+            padding: 8px 14px;
+            text-decoration: none;
+            border-radius: 6px;
+            background-color: #e8f5e9;
+            color: #1b5e20;
+            border: 1px solid #a5d6a7;
+            font-weight: bold;
+        }
+
+        .nav-link.active {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .muted-note {
+            color: #666;
+            margin-bottom: 14px;
+        }
+
+        .inline-link-btn {
+            display: inline-block;
+            text-decoration: none;
+            background: #2196F3;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 4px;
+            margin-top: 6px;
+        }
     </style>
 </head>
 
 <body>
 
 <h1>Table Status</h1>
+
+<div class="top-nav">
+    <a class="nav-link active" href="/">🪑 Tables</a>
+    <a class="nav-link" href="/orders">📦 Orders</a>
+    <a class="nav-link" href="/kitchen">🧑‍🍳 Kitchen</a>
+    <a class="nav-link" href="/billing">📊 Billing</a>
+
+</div>
+
+<div class="muted-note">This view is linked with Orders. Freeing a table affects active orders, and new orders affect table status.</div>
 
 <div class="container">
 
@@ -79,6 +127,7 @@
                     <th>ID</th>
                     <th>Capacity</th>
                     <th>Status</th>
+                    <th>Active Orders</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -120,15 +169,24 @@
 <!-- 🔥 REAL-TIME SCRIPT -->
 <script>
 function refreshData() {
-    fetch('/tables-data')
-        .then(res => res.json())
-        .then(data => {
+    Promise.all([
+        fetch('/tables-data').then(res => res.json()),
+        fetch('/api/orders/active').then(res => res.json())
+    ])
+        .then(([data, activeOrders]) => {
+
+            const orderCountByTable = {};
+            activeOrders.forEach(order => {
+                orderCountByTable[order.tableId] = (orderCountByTable[order.tableId] || 0) + 1;
+            });
 
             // TABLES
             const tableBody = document.getElementById("table-body");
             tableBody.innerHTML = "";
 
             data.tables.forEach(t => {
+                const canonicalTableId = `TABLE-${t.tableId}`;
+                const activeOrderCount = orderCountByTable[canonicalTableId] || 0;
                 let row = `
                     <tr>
                         <td>${t.tableId}</td>
@@ -137,10 +195,12 @@ function refreshData() {
                             ${t.status}
                             ${t.status === 'CLEANING' ? '(Cleaning...)' : ''}
                         </td>
+                        <td><strong>${activeOrderCount}</strong></td>
                         <td>
                             <form action="/free/${t.tableId}" method="post">
                                 <button type="submit">Free</button>
                             </form>
+                            <a class="inline-link-btn" href="/orders?tableId=${canonicalTableId}&customerId=${t.customerId || ''}">View Orders</a>
                         </td>
                     </tr>
                 `;
@@ -162,7 +222,8 @@ function refreshData() {
                 waitBody.innerHTML += row;
             });
 
-        });
+        })
+        .catch(err => console.error('Error refreshing table view:', err));
 }
 
 // 🔁 refresh every 2 sec

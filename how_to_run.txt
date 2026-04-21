@@ -1,0 +1,3 @@
+lsof -ti:8080 | xargs kill -9 2>/dev/null || true && cd /workspaces/OOAD_Smart-Restaurant- && mvn spring-boot:run 2>&1 &
+
+run this command if the build fails.. sometimes build fails bcs of the port being in use.

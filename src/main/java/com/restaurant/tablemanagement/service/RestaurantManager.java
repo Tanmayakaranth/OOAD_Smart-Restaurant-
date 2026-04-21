@@ -36,6 +36,7 @@ public class RestaurantManager {
 
         if (best != null) {
             best.setStatus(TableStatus.OCCUPIED);
+            best.setCustomerId(customer.getCustomerId());
             return best;
         }
 
@@ -49,6 +50,7 @@ public class RestaurantManager {
             if (t.getTableId() == id) {
                 t.setStatus(TableStatus.CLEANING);
                 t.setCleaningEndTime(System.currentTimeMillis() + 5000);
+                t.setCustomerId(null);  // Clear customer when table is freed
 
                 System.out.println("Table " + id + " is CLEANING");
                 break;
@@ -103,6 +105,7 @@ public class RestaurantManager {
         Customer chosen = candidates.get(0);
 
         table.setStatus(TableStatus.OCCUPIED);
+        table.setCustomerId(chosen.getCustomerId());
         waitlist.remove(chosen);
 
         System.out.println("Assigned Table " + table.getTableId() +
@@ -128,6 +131,28 @@ public class RestaurantManager {
 
     public List<Table> getTables() {
         return tables;
+    }
+
+    public synchronized Table getTableById(int tableId) {
+        for (Table table : tables) {
+            if (table.getTableId() == tableId) {
+                return table;
+            }
+        }
+        return null;
+    }
+
+    public synchronized void occupyTable(int tableId) {
+        Table table = getTableById(tableId);
+        if (table == null) {
+            throw new RuntimeException("Table not found: " + tableId);
+        }
+
+        if (table.getStatus() == TableStatus.CLEANING) {
+            throw new RuntimeException("Table " + tableId + " is currently cleaning");
+        }
+
+        table.setStatus(TableStatus.OCCUPIED);
     }
 
     public List<Customer> getWaitlist() {

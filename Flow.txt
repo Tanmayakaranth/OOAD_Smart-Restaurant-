@@ -1,0 +1,96 @@
+OOAD Smart Restaurant - Project Structure
+==========================================
+
+ROOT
+├── pom.xml                           (Maven configuration)
+├── mvnw                              (Maven wrapper)
+├── mvnw.cmd                          (Maven wrapper for Windows)
+├── HELP.md                           (Maven help)
+├── README.md                         (Project documentation)
+├── Flow.txt                          (This file - Project structure)
+├── SCHEDULER_ANALYSIS.md             (Scheduler analysis)
+│
+└── src/
+    │
+    ├── main/
+    │   ├── java/com/restaurant/tablemanagement/
+    │   │   │
+    │   │   ├── TableManagementApplication.java (Spring Boot entry point)
+    │   │   │
+    │   │   ├── config/
+    │   │   │   └── WebSocketConfig.java (WebSocket STOMP configuration)
+    │   │   │
+    │   │   ├── controller/
+    │   │   │   ├── ViewController.java (Main view routing - /, /orders, /kitchen)
+    │   │   │   ├── OrderController.java (CRUD operations for orders)
+    │   │   │   ├── TableController.java (Table management endpoints)
+    │   │   │   ├── KitchenController.java (Kitchen queue & scheduling endpoints)
+    │   │   │   └── KitchenWebSocketController.java (Real-time WebSocket updates)
+    │   │   │
+    │   │   ├── dto/
+    │   │   │   ├── OrderRequest.java (Order creation request DTO)
+    │   │   │   ├── CustomerRequest.java (Customer request DTO)
+    │   │   │   ├── KitchenRequest.java (Kitchen operations request DTO)
+    │   │   │   └── KitchenUpdateMessage.java (WebSocket update messages)
+    │   │   │
+    │   │   ├── model/
+    │   │   │   ├── Order.java (Order entity with equals/hashCode methods)
+    │   │   │   ├── OrderItem.java (Individual item in order)
+    │   │   │   ├── OrderStatus.java (Enum: CREATED, PREPARING, READY, SERVED, CANCELLED)
+    │   │   │   ├── OrderPriority.java (Enum: VIP, NORMAL, LOW)
+    │   │   │   ├── Customer.java (Customer entity)
+    │   │   │   ├── Table.java (Table/Reservation entity)
+    │   │   │   ├── TableStatus.java (Enum: AVAILABLE, OCCUPIED, CLEANING)
+    │   │   │   └── Reservation.java (Reservation entity)
+    │   │   │
+    │   │   └── service/
+    │   │       ├── SchedulerStrategy.java (Interface for scheduling algorithms)
+    │   │       ├── FIFOScheduler.java (First-In-First-Out implementation)
+    │   │       ├── PriorityScheduler.java (Priority-based ordering)
+    │   │       ├── SJFScheduler.java (Shortest Job First implementation)
+    │   │       │
+    │   │       ├── KitchenQueue.java (Queue management - reordering on strategy change)
+    │   │       ├── KitchenService.java (Kitchen business logic)
+    │   │       ├── OrderService.java (Order business logic)
+    │   │       ├── OrderPriorityQueue.java (Alternative priority queue)
+    │   │       └── RestaurantManager.java (Restaurant operations manager)
+    │   │
+    │   └── resources/
+    │       ├── application.properties (Spring Boot configuration)
+    │       └── templates/
+    │           ├── tables.html (Table management UI - Route: /)
+    │           ├── orders.html (Order management UI - Route: /orders)
+    │           └── kitchen.html (Kitchen dashboard UI - Route: /kitchen)
+    │
+    └── test/
+        └── java/com/restaurant/table_management/
+            └── TableManagementApplicationTests.java (Integration tests)
+
+KEY FEATURES
+============
+
+1. SCHEDULING STRATEGIES
+   - FIFO: Orders processed in creation order
+   - Priority: VIP orders prioritized over normal orders
+   - SJF: Shortest Job First (fewer items = higher priority)
+   - Dynamic switching with automatic queue reordering
+
+2. REAL-TIME UPDATES
+   - WebSocket (STOMP) for live kitchen dashboard updates
+   - Polling fallback (5-second intervals) for queue refresh
+   - SockJS support for older browsers
+
+3. ORDER WORKFLOW
+   CREATED → PREPARING → READY → SERVED
+   OR
+   CREATED → CANCELLED
+
+4. TABLE MANAGEMENT
+   AVAILABLE → OCCUPIED → CLEANING → AVAILABLE
+
+FIXES APPLIED
+=============
+- Order class: Added equals() and hashCode() methods for proper queue management
+- WebSocket CORS: Changed setAllowedOrigins("*") to setAllowedOriginPatterns("*") 
+- Navigation: Fixed routing links on all three pages (/, /orders, /kitchen)
+- Kitchen Queue: Reordering logic fully functional on strategy change

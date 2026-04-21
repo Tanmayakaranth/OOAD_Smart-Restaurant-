@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import com.restaurant.tablemanagement.service.RestaurantManager;
+import com.restaurant.tablemanagement.service.OrderService;
 import com.restaurant.tablemanagement.model.Table;
 import com.restaurant.tablemanagement.model.Customer;
 import com.restaurant.tablemanagement.dto.CustomerRequest;
@@ -16,6 +17,9 @@ public class TableController {
 
     @Autowired
     private RestaurantManager manager;
+
+    @Autowired
+    private OrderService orderService;
 
     @PostMapping("/allocate")
     public String allocate(@RequestBody CustomerRequest request) {
@@ -36,8 +40,9 @@ public class TableController {
 
     @PostMapping("/free/{id}")
     public String free(@PathVariable int id) {
+        int cancelledOrders = orderService.cancelActiveOrdersForTable("TABLE-" + id);
         manager.freeTable(id);
-        return "Cleaning started";
+        return "Cleaning started. Cancelled orders: " + cancelledOrders;
     }
 
     @GetMapping

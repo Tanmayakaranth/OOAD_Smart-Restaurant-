@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Kitchen Scheduler Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 90%;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #FF6F00;
+            color: white;
+        }
+
+        td {
+            background-color: white;
+        }
+
+        .PENDING {
+            background-color: #fff3e0;
+        }
+
+        .PREPARING {
+            background-color: #ffe0b2;
+        }
+
+        .READY {
+            background-color: #e8f5e9;
+        }
+
+        .COMPLETED {
+            background-color: #f3e5f5;
+        }
+
+        button {
+            padding: 6px 12px;
+            background-color: #FF6F00;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 2px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #E65100;
+        }
+
+        button.success {
+            background-color: #4CAF50;
+        }
+
+        button.success:hover {
+            background-color: #45a049;
+        }
+
+        button.warning {
+            background-color: #ff9800;
+        }
+
+        button.warning:hover {
+            background-color: #e68900;
+        }
+
+        button.danger {
+            background-color: #f44336;
+        }
+
+        button.danger:hover {
+            background-color: #da190b;
+        }
+
+        .container {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            flex: 1;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: inline-block;
+            width: 150px;
+            font-weight: bold;
+        }
+
+        input, select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 250px;
+        }
+
+        .form-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .items-list {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .priority-VIP {
+            color: #d32f2f;
+            font-weight: bold;
+            background-color: #ffebee;
+            padding: 4px 8px;
+            border-radius: 3px;
+        }
+
+        .priority-NORMAL {
+            color: #f57c00;
+            font-weight: bold;
+            background-color: #fff3e0;
+            padding: 4px 8px;
+            border-radius: 3px;
+        }
+
+        .priority-LOW {
+            color: #388e3c;
+            font-weight: bold;
+            background-color: #e8f5e9;
+            padding: 4px 8px;
+            border-radius: 3px;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #FF6F00;
+        }
+
+        .success-box {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .warning-box {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #FF9800;
+        }
+
+        .top-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .nav-link {
+            display: inline-block;
+            padding: 8px 14px;
+            text-decoration: none;
+            border-radius: 6px;
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+            font-weight: bold;
+        }
+
+        .nav-link.active {
+            background-color: #FF6F00;
+            color: white;
+            border-color: #FF6F00;
+        }
+
+        .muted-note {
+            color: #666;
+            margin-bottom: 14px;
+        }
+
+        .mini-table {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .status-pill {
+            border-radius: 12px;
+            padding: 4px 12px;
+            color: white;
+            font-size: 12px;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .status-PENDING { background-color: #ff9800; }
+        .status-PREPARING { background-color: #2196F3; }
+        .status-READY { background-color: #4CAF50; }
+        .status-COMPLETED { background-color: #9C27B0; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid #FF6F00;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #FF6F00;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .priority-filter {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .filter-btn {
+            padding: 6px 12px;
+            background-color: #e0e0e0;
+            color: #333;
+            border: 2px solid transparent;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .filter-btn.active {
+            background-color: #FF6F00;
+            color: white;
+            border-color: #FF6F00;
+        }
+
+        .order-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .detail-item {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 3px solid #FF6F00;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            color: #333;
+            margin-top: 3px;
+        }
+
+        .timer {
+            font-size: 18px;
+            font-weight: bold;
+            color: #FF6F00;
+        }
+
+        .rush-hour-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #ff5252;
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .normal-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .order-item {
+            background: #f5f5f5;
+            padding: 8px;
+            margin: 4px 0;
+            border-radius: 3px;
+            border-left: 3px solid #FF6F00;
+        }
+
+        .item-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .item-qty {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .item-notes {
+            color: #ff6f00;
+            font-size: 11px;
+            font-style: italic;
+        }
+
+        @media print {
+            .form-section, button, .top-nav {
+                display: none;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<h1>🍳 Kitchen Scheduler Dashboard</h1>
+
+<div class="top-nav">
+    <a class="nav-link" href="/">🪑Tables</a>
+    <a class="nav-link" href="/orders">📦 Orders</a>
+    <a class="nav-link active" href="/kitchen">🧑‍🍳 Kitchen</a>
+    <a class="nav-link" href="/billing">📊 Billing</a>
+    
+</div>
+
+<div class="muted-note">Real-time kitchen queue management. Orders refresh every 2 seconds. Switch scheduling strategies to optimize kitchen flow.</div>
+
+<!-- STATISTICS CARDS -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-number" id="pending-count">0</div>
+        <div class="stat-label">PENDING</div>
+    </div>
+    <div class="stat-card" style="border-left-color: #2196F3;">
+        <div class="stat-number" id="preparing-count" style="color: #2196F3;">0</div>
+        <div class="stat-label">PREPARING</div>
+    </div>
+    <div class="stat-card" style="border-left-color: #4CAF50;">
+        <div class="stat-number" id="ready-count" style="color: #4CAF50;">0</div>
+        <div class="stat-label">READY</div>
+    </div>
+    <div class="stat-card" style="border-left-color: #9C27B0;">
+        <div class="stat-number" id="completed-count" style="color: #9C27B0;">0</div>
+        <div class="stat-label">COMPLETED</div>
+    </div>
+    <div class="stat-card" style="border-left-color: #FF9800;">
+        <div class="stat-number" id="last-table" style="color: #FF9800;">-</div>
+        <div class="stat-label">LAST TABLE</div>
+    </div>
+</div>
+
+<!-- SCHEDULING STRATEGY SECTION -->
+<div class="form-section">
+    <h2>⚙️ Scheduling Strategy</h2>
+    
+    <div class="form-group">
+        <label>Current Strategy:</label>
+        <span id="current-strategy" style="font-weight: bold; color: #FF6F00;">FIFO (First-In-First-Out)</span>
+    </div>
+
+    <div class="form-group">
+        <label>Change Strategy:</label>
+        <select id="strategy-select" onchange="changeStrategy()">
+            <option value="FIFO">FIFO - Fair Order (First In First Out)</option>
+            <option value="PRIORITY">PRIORITY - VIP First (High to Low Priority)</option>
+            <option value="SJF">SJF - Shortest Job First (Fewest Items)</option>
+        </select>
+    </div>
+
+    <button onclick="applyStrategy()" class="success">Apply Strategy</button>
+
+    <div class="info-box" style="margin-top: 15px;">
+        <strong>Strategy Comparison:</strong><br>
+        <strong>FIFO:</strong> Orders processed in order received (fair, simple)<br>
+        <strong>PRIORITY:</strong> VIP orders first, optimized for customer satisfaction<br>
+        <strong>SJF:</strong> Simplest orders first, maximizes throughput
+    </div>
+</div>
+
+<!-- PENDING ORDERS (NEXT TO PREPARE) -->
+<div class="form-section">
+    <h2>⏳ Pending Orders (Queue)</h2>
+    
+    <div class="priority-filter">
+        <button class="filter-btn active" onclick="filterOrders('ALL')">All</button>
+        <button class="filter-btn" onclick="filterOrders('VIP')">VIP</button>
+        <button class="filter-btn" onclick="filterOrders('NORMAL')">Normal</button>
+        <button class="filter-btn" onclick="filterOrders('LOW')">Other</button>
+    </div>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Position</th>
+                <th>Order ID</th>
+                <th>Table</th>
+                <th>Priority</th>
+                <th>Items</th>
+                <th>Created</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="pending-body"></tbody>
+    </table>
+
+    <div id="empty-pending" class="info-box" style="display: none; text-align: center;">
+        ✅ No pending orders! Kitchen is clear.
+    </div>
+</div>
+
+<!-- PREPARING ORDERS (IN PROGRESS) -->
+<div class="form-section">
+    <h2>👨‍🍳 Orders Being Prepared</h2>
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Table</th>
+                <th>Priority</th>
+                <th>Items</th>
+                <th>Time Cooking</th>
+                <th>Details</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="preparing-body"></tbody>
+    </table>
+
+    <div id="empty-preparing" class="success-box" style="display: none; text-align: center;">
+        ✅ No orders being prepared.
+    </div>
+</div>
+
+<!-- READY ORDERS (PICKUP) -->
+<div class="form-section">
+    <h2>✅ Orders Ready for Pickup</h2>
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Table</th>
+                <th>Priority</th>
+                <th>Items</th>
+                <th>Ready Since</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="ready-body"></tbody>
+    </table>
+
+    <div id="empty-ready" class="warning-box" style="display: none; text-align: center;">
+        ⏰ No orders ready yet.
+    </div>
+</div>
+
+<!-- ORDER DETAILS MODAL -->
+<div class="form-section">
+    <h2>📋 Order Details</h2>
+    
+    <div class="form-group">
+        <label>Search Order ID:</label>
+        <input type="text" id="search-order-id" placeholder="e.g., ORD-1234567890">
+        <button onclick="searchOrder()" class="success">Search</button>
+    </div>
+
+    <div id="order-details-display"></div>
+</div>
+
+<!-- RUSH HOUR MODE -->
+<div class="form-section">
+    <h2>⚡ Kitchen Status</h2>
+    
+    <div style="padding: 15px; background: #f9f9f9; border-radius: 4px; text-align: center;">
+        <span id="rush-status-badge" class="normal-badge">🟢 NORMAL MODE</span>
+        <button onclick="toggleRushHour()" class="warning" style="margin-left: 20px;">Toggle Rush Hour</button>
+    </div>
+
+    <div class="info-box" style="margin-top: 15px; text-align: center;">
+        <span id="rush-info">Kitchen operating in normal mode.</span>
+    </div>
+</div>
+
+<!-- STATISTICS & PERFORMANCE -->
+<div class="form-section">
+    <h2>📊 Performance Metrics</h2>
+    
+    <table class="mini-table" border="1">
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Total Orders Today</strong></td>
+                <td id="total-orders">0</td>
+            </tr>
+            <tr>
+                <td><strong>Completed Orders</strong></td>
+                <td id="completed-orders">0</td>
+            </tr>
+            <tr>
+                <td><strong>Active Queue Length</strong></td>
+                <td id="queue-length">0</td>
+            </tr>
+            <tr>
+                <td><strong>Average Prep Time</strong></td>
+                <td id="avg-prep-time">--</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- REAL-TIME SCRIPT -->
+<script>
+let allPendingOrders = [];
+let allPreparingOrders = [];
+let allReadyOrders = [];
+let currentFilter = 'ALL';
+let rushHourEnabled = false;
+let selectedStrategy = 'FIFO';
+
+// Calculate time elapsed
+function formatTime(createdAt) {
+    const created = new Date(createdAt);
+    const now = new Date();
+    const diff = now - created;
+    const minutes = Math.floor(diff / 60000);
+    const seconds = Math.floor((diff % 60000) / 1000);
+    
+    if (minutes === 0) {
+        return `${seconds}s ago`;
+    } else if (minutes < 60) {
+        return `${minutes}m ${seconds}s ago`;
+    } else {
+        const hours = Math.floor(minutes / 60);
+        return `${hours}h ${minutes % 60}m ago`;
+    }
+}
+
+function formatTimeElapsed(startTime) {
+    const start = new Date(startTime);
+    const now = new Date();
+    const diff = now - start;
+    const minutes = Math.floor(diff / 60000);
+    const seconds = Math.floor((diff % 60000) / 1000);
+    
+    return `${minutes}m ${seconds}s`;
+}
+
+function getPriorityClass(priority) {
+    if (priority === 'VIP') return 'VIP';
+    if (priority === 'NORMAL') return 'NORMAL';
+    return 'LOW';
+}
+
+function filterOrders(filter) {
+    currentFilter = filter;
+    
+    // Update filter button states
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    refreshPendingDisplay();
+}
+
+function refreshPendingDisplay() {
+    const pendingBody = document.getElementById('pending-body');
+    pendingBody.innerHTML = '';
+
+    let filtered = allPendingOrders;
+    if (currentFilter === 'VIP') {
+        filtered = allPendingOrders.filter(o => o.priority === 'VIP');
+    } else if (currentFilter === 'NORMAL') {
+        filtered = allPendingOrders.filter(o => o.priority === 'NORMAL');
+    } else if (currentFilter === 'LOW') {
+        filtered = allPendingOrders.filter(o => o.priority !== 'VIP' && o.priority !== 'NORMAL');
+    }
+
+    if (filtered.length === 0) {
+        document.getElementById('empty-pending').style.display = 'block';
+        return;
+    }
+
+    document.getElementById('empty-pending').style.display = 'none';
+
+    filtered.forEach((order, index) => {
+        const itemCount = order.orderItems ? order.orderItems.length : 0;
+        const priorityClass = getPriorityClass(order.priority);
+        
+        let row = `
+            <tr class="PENDING">
+                <td><strong>#${index + 1}</strong></td>
+                <td><strong>${order.orderId}</strong></td>
+                <td>${order.tableId}</td>
+                <td><span class="priority-${priorityClass}">${order.priority}</span></td>
+                <td>${itemCount}</td>
+                <td>${formatTime(order.createdAt)}</td>
+                <td>
+                    <button onclick="startPreparation('${order.orderId}')" class="success">Start</button>
+                </td>
+            </tr>
+        `;
+        pendingBody.innerHTML += row;
+    });
+}
+
+function refreshPreparingDisplay() {
+    const preparingBody = document.getElementById('preparing-body');
+    preparingBody.innerHTML = '';
+
+    if (allPreparingOrders.length === 0) {
+        document.getElementById('empty-preparing').style.display = 'block';
+        return;
+    }
+
+    document.getElementById('empty-preparing').style.display = 'none';
+
+    allPreparingOrders.forEach(order => {
+        const itemCount = order.orderItems ? order.orderItems.length : 0;
+        const priorityClass = getPriorityClass(order.priority);
+        const timeElapsed = formatTimeElapsed(order.createdAt);
+        
+        let itemsHtml = '';
+        if (order.orderItems) {
+            order.orderItems.forEach(item => {
+                itemsHtml += `
+                    <div class="order-item">
+                        <div class="item-name">${item.menuItemId}</div>
+                        <div class="item-qty">Qty: ${item.quantity}</div>
+                        ${item.specialNotes ? `<div class="item-notes">${item.specialNotes}</div>` : ''}
+                    </div>
+                `;
+            });
+        }
+        
+        let row = `
+            <tr class="PREPARING">
+                <td><strong>${order.orderId}</strong></td>
+                <td>${order.tableId}</td>
+                <td><span class="priority-${priorityClass}">${order.priority}</span></td>
+                <td>${itemCount}</td>
+                <td><span class="timer">⏱️ ${timeElapsed}</span></td>
+                <td>
+                    <button onclick="viewOrderDetails('${order.orderId}')" class="info" style="background-color: #2196F3;">View</button>
+                </td>
+                <td>
+                    <button onclick="markReady('${order.orderId}')" class="success">Ready</button>
+                </td>
+            </tr>
+        `;
+        preparingBody.innerHTML += row;
+    });
+}
+
+function refreshReadyDisplay() {
+    const readyBody = document.getElementById('ready-body');
+    readyBody.innerHTML = '';
+
+    if (allReadyOrders.length === 0) {
+        document.getElementById('empty-ready').style.display = 'block';
+        return;
+    }
+
+    document.getElementById('empty-ready').style.display = 'none';
+
+    allReadyOrders.forEach(order => {
+        const itemCount = order.orderItems ? order.orderItems.length : 0;
+        const priorityClass = getPriorityClass(order.priority);
+        
+        let row = `
+            <tr class="READY">
+                <td><strong>${order.orderId}</strong></td>
+                <td>${order.tableId}</td>
+                <td><span class="priority-${priorityClass}">${order.priority}</span></td>
+                <td>${itemCount}</td>
+                <td>${formatTime(order.createdAt)}</td>
+                <td>
+                    <button onclick="completeOrder('${order.orderId}')" class="success">Complete</button>
+                </td>
+            </tr>
+        `;
+        readyBody.innerHTML += row;
+    });
+}
+
+function refreshData() {
+    Promise.all([
+        fetch('/api/kitchen/pending').then(res => res.json()).catch(() => []),
+        fetch('/api/kitchen/preparing').then(res => res.json()).catch(() => []),
+        fetch('/api/kitchen/ready').then(res => res.json()).catch(() => []),
+        fetch('/api/kitchen/statistics').then(res => res.json()).catch(() => ({pendingCount: 0, preparingCount: 0, readyCount: 0, completedCount: 0, lastCompletedTable: null, currentStrategy: 'FIFO'}))
+    ])
+        .then(([pending, preparing, ready, stats]) => {
+            allPendingOrders = pending;
+            allPreparingOrders = preparing;
+            allReadyOrders = ready;
+
+            // Update counters with real data
+            document.getElementById('pending-count').textContent = pending.length;
+            document.getElementById('preparing-count').textContent = preparing.length;
+            document.getElementById('ready-count').textContent = ready.length;
+            document.getElementById('completed-count').textContent = stats.completedCount || 0;
+            document.getElementById('last-table').textContent = stats.lastCompletedTable || '-';
+
+            // Update strategy display
+            document.getElementById('current-strategy').textContent = stats.currentStrategy || 'FIFO (First-In-First-Out)';
+            
+            // Update Performance Metrics table
+            const totalOrders = pending.length + preparing.length + ready.length + (stats.completedCount || 0);
+            document.getElementById('total-orders').textContent = totalOrders;
+            document.getElementById('completed-orders').textContent = stats.completedCount || 0;
+            document.getElementById('queue-length').textContent = pending.length + preparing.length;
+            
+            // Calculate average prep time from completed orders
+            let totalPrepTime = 0;
+            let completedOrdersCount = 0;
+            const allOrders = [...pending, ...preparing, ...ready];
+            allOrders.forEach(order => {
+                if (order.completionTime && order.createdAt) {
+                    const created = new Date(order.createdAt);
+                    const completed = new Date(order.completionTime);
+                    const prepTime = (completed - created) / 1000 / 60; // Convert to minutes
+                    totalPrepTime += prepTime;
+                    completedOrdersCount++;
+                }
+            });
+            
+            if (completedOrdersCount > 0) {
+                const avgPrepTime = (totalPrepTime / completedOrdersCount).toFixed(1);
+                document.getElementById('avg-prep-time').textContent = avgPrepTime + ' min';
+            } else {
+                document.getElementById('avg-prep-time').textContent = '--';
+            }
+
+            // Refresh displays
+            refreshPendingDisplay();
+            refreshPreparingDisplay();
+            refreshReadyDisplay();
+        })
+        .catch(err => console.error('Error refreshing kitchen data:', err));
+}
+
+function startPreparation(orderId) {
+    if (!confirm(`Start preparing order ${orderId}?`)) return;
+
+    fetch(`/api/kitchen/start/${orderId}`, { method: 'POST' })
+        .then(res => res.json())
+        .then(msg => {
+            refreshData();
+        })
+        .catch(err => console.error(`Error: ${err}`));
+}
+
+function markReady(orderId) {
+    if (!confirm(`Mark order ${orderId} as ready?`)) return;
+
+    fetch(`/api/kitchen/ready/${orderId}`, { method: 'POST' })
+        .then(res => res.json())
+        .then(msg => {
+            refreshData();
+        })
+        .catch(err => console.error(`Error: ${err}`));
+}
+
+function completeOrder(orderId) {
+    if (!confirm(`Complete order ${orderId}?`)) return;
+
+    fetch(`/api/kitchen/complete/${orderId}`, { method: 'POST' })
+        .then(res => res.json())
+        .then(msg => {
+            refreshData();
+        })
+        .catch(err => console.error(`Error: ${err}`));
+}
+
+function changeStrategy() {
+    selectedStrategy = document.getElementById('strategy-select').value;
+}
+
+function applyStrategy() {
+    fetch(`/api/kitchen/strategy/${selectedStrategy}`, { method: 'POST' })
+        .then(res => res.json())
+        .then(msg => {
+            refreshData();
+        })
+        .catch(err => console.error(`Error: ${err}`));
+}
+
+function toggleRushHour() {
+    rushHourEnabled = !rushHourEnabled;
+    
+    const badge = document.getElementById('rush-status-badge');
+    const info = document.getElementById('rush-info');
+    
+    if (rushHourEnabled) {
+        badge.innerHTML = '🔴 RUSH HOUR ACTIVE';
+        badge.className = 'rush-hour-badge';
+        info.textContent = 'Kitchen in rush hour mode! Prioritize orders. All hands on deck!';
+    } else {
+        badge.innerHTML = '🟢 NORMAL MODE';
+        badge.className = 'normal-badge';
+        info.textContent = 'Kitchen operating in normal mode.';
+    }
+}
+
+function viewOrderDetails(orderId) {
+    fetch(`/api/kitchen/all`)
+        .then(res => res.json())
+        .then(orders => {
+            const order = orders.find(o => o.orderId === orderId);
+            if (order) {
+                displayOrderDetails(order);
+            }
+        })
+        .catch(err => console.error('Could not load order details:', err));
+}
+
+function searchOrder() {
+    const orderId = document.getElementById('search-order-id').value;
+    if (!orderId) {
+        return;
+    }
+
+    fetch(`/api/kitchen/all`)
+        .then(res => res.json())
+        .then(orders => {
+            const order = orders.find(o => o.orderId === orderId);
+            if (order) {
+                displayOrderDetails(order);
+            } else {
+                document.getElementById('order-details-display').innerHTML = '<p>Order not found</p>';
+            }
+        })
+        .catch(err => console.error('Error searching order:', err));
+}
+
+function displayOrderDetails(order) {
+    let itemsHtml = '';
+    if (order.orderItems) {
+        order.orderItems.forEach(item => {
+            itemsHtml += `
+                <div class="order-item">
+                    <div class="item-name">📦 ${item.menuItemId}</div>
+                    <div class="item-qty">Quantity: ${item.quantity}</div>
+                    ${item.specialNotes ? `<div class="item-notes">✏️ ${item.specialNotes}</div>` : ''}
+                </div>
+            `;
+        });
+    }
+
+    const priorityClass = getPriorityClass(order.priority);
+
+    let html = `
+        <div class="info-box">
+            <div class="order-detail-grid">
+                <div class="detail-item">
+                    <div class="detail-label">Order ID</div>
+                    <div class="detail-value"><strong>${order.orderId}</strong></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Table</div>
+                    <div class="detail-value"><strong>${order.tableId}</strong></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Priority</div>
+                    <div class="detail-value"><span class="priority-${priorityClass}">${order.priority}</span></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Status</div>
+                    <div class="detail-value"><span class="status-pill status-${order.status}">${order.status}</span></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Items Count</div>
+                    <div class="detail-value">${order.orderItems ? order.orderItems.length : 0}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Customer ID</div>
+                    <div class="detail-value">${order.customerId}</div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 15px; border-bottom: 2px solid #FF6F00; padding-bottom: 10px;">Items List</h3>
+            ${itemsHtml}
+        </div>
+    `;
+
+    document.getElementById('order-details-display').innerHTML = html;
+}
+
+// ===== WebSocket Real-Time Updates =====
+let stompClient = null;
+let isWebSocketConnected = false;
+
+/**
+ * Initializes WebSocket connection for real-time kitchen updates
+ */
+function initWebSocket() {
+    // Use SockJS as WebSocket fallback
+    const socket = new SockJS('/ws/kitchen');
+    stompClient = Stomp.over(socket);
+    
+    stompClient.connect({}, function(frame) {
+        isWebSocketConnected = true;
+        console.log('✅ WebSocket connected:', frame);
+        
+        // Subscribe to kitchen updates topic
+        stompClient.subscribe('/topic/kitchen/updates', function(message) {
+            const update = JSON.parse(message.body);
+            handleKitchenUpdate(update);
+        });
+        
+        // Request full refresh after connecting
+        stompClient.send('/app/kitchen/connect', {}, JSON.stringify({}));
+    }, function(error) {
+        isWebSocketConnected = false;
+        console.error('❌ WebSocket connection error:', error);
+        console.log('Falling back to polling mode...');
+    });
+}
+
+/**
+ * Handles incoming WebSocket updates from the kitchen service
+ * @param {Object} update - KitchenUpdateMessage from server
+ */
+function handleKitchenUpdate(update) {
+    console.log('📨 Kitchen update received:', update.updateType);
+    
+    switch(update.updateType) {
+        case 'ORDER_ADDED':
+            console.log('🆕 New order added:', update.order.orderId);
+            refreshData();
+            // Show visual notification
+            showNotification('New Order Added', `Order #${update.order.orderId} from Table ${update.order.tableId}`);
+            break;
+            
+        case 'ORDER_STARTED':
+            console.log('⏳ Order started:', update.order.orderId);
+            refreshData();
+            break;
+            
+        case 'ORDER_READY':
+            console.log('✅ Order ready:', update.order.orderId);
+            refreshData();
+            showNotification('Order Ready!', `Order #${update.order.orderId} is ready for pickup`);
+            break;
+            
+        case 'ORDER_COMPLETED':
+            console.log('🎉 Order completed:', update.order.orderId);
+            refreshData();
+            break;
+            
+        case 'STRATEGY_CHANGED':
+            console.log('⚙️ Scheduling strategy changed');
+            refreshData();
+            break;
+            
+        case 'FULL_REFRESH':
+            console.log('🔄 Full refresh requested');
+            if (update.pendingOrders) pendingOrders = update.pendingOrders;
+            if (update.preparingOrders) preparingOrders = update.preparingOrders;
+            if (update.readyOrders) readyOrders = update.readyOrders;
+            refreshDisplay();
+            break;
+            
+        default:
+            console.log('Unknown update type:', update.updateType);
+    }
+}
+
+/**
+ * Shows a browser notification (optional, requires user permission)
+ */
+function showNotification(title, message) {
+    // Only show if browser supports notifications and user has granted permission
+    if (!("Notification" in window)) {
+        console.log('Browser does not support notifications');
+        return;
+    }
+    
+    if (Notification.permission === "granted") {
+        new Notification(title, {
+            body: message,
+            icon: '/images/kitchen-icon.png'
+        });
+    }
+}
+
+/**
+ * Reconnects WebSocket if disconnected
+ */
+function ensureWebSocketConnected() {
+    if (!isWebSocketConnected || !stompClient || !stompClient.connected) {
+        console.log('🔗 Reconnecting WebSocket...');
+        initWebSocket();
+    }
+}
+
+// 🔁 Fallback: Refresh every 5 seconds (reduced from 2s since WebSocket handles real-time updates)
+setInterval(refreshData, 5000);
+
+// 🔗 Check WebSocket connection every 10 seconds
+setInterval(ensureWebSocketConnected, 10000);
+
+// Initial load
+refreshData();
+
+// Initialize WebSocket connection
+try {
+    initWebSocket();
+} catch(error) {
+    console.error('Failed to initialize WebSocket:', error);
+    console.log('WebSocket will be retried automatically');
+}
+</script>
+
+<!-- Load SockJS and STOMP libraries for WebSocket support -->
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+</body>
+</html>
